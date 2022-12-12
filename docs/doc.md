@@ -10,11 +10,12 @@
 
 ## 5. Responses
 
----
+
 <br/>
 
 ## **1. Service Registration**
-This library use its own dependency injection module for minimal dependency to other projects. All handlers'll get their dependencies from  **ContainerDistributionController** class. This class inherited from **IDistributionController**.
+---
+This library use its own dependency injection module for minimal dependency to other projects. All handlers will get their dependencies from  **ContainerDistributionController** class. This class inherited from **IDistributionController**.
 Service registration operations are manage by **DiServiceCollection** class that implements **IDiServiceCollection**.
 
 <br>
@@ -71,13 +72,64 @@ builder.Services.AddControllers();
 
 ```
 ## **2. Requests**
-Requests must be imlement one of them that **IRequest** or **IQuery** interfaces. Their handlers must be declared in it as "nested". **IRequestHandler** or **IQueryHandler** are handler interfaces of requests.<br/><br/>
+---
+Requests must be implement one of them that **IRequest** or **IQuery** interfaces. Their handlers must be declared in it as "nested". **IRequestHandler** or **IQueryHandler** are handler interfaces of requests.<br/><br/>
 
-### Usage of IRequest and IQuery interfaces:
+### Example Implementation of a Request :
 
 <br/>
 
 ```cs
 
-```
+public partial class CreateProductCommand : IRequest<Product>
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public decimal Price { get; set; }
 
+        public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand>
+        {
+            private IProductRepository _repo;
+            public CreateProductCommandHandler(IProductRepository repo)
+            {
+                _repo = repo;
+            }
+            public void Handle(CreateProductCommand request)
+            {
+                var product = new Product();
+                product.Id = request.Id;
+                product.Name = request.Name;
+                product.Price = request.Price;
+                _repo.Add(product);
+            }
+        }
+    }
+
+```
+And
+
+### Example Implementation of a Query :
+<br/>
+
+```cs
+
+public partial class GetProductByIdQuery : IQuery<Product>
+{
+    public int Id { get; set; }
+
+    public class GetProductByIdQueryHandler : IQueryHandler<GetProductByIdQuery, Product>
+    {
+        private IProductRepository _repo;
+
+        public GetProductByIdQueryHandler(IProductRepository repo)
+        {
+                _repo = repo;
+        }
+        public Product Handle(GetProductByIdQuery query)
+        {
+                return _repo.GetBy(p => p.Id == query.Id);
+        }
+    }
+}
+
+```
