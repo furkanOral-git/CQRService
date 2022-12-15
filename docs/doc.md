@@ -71,6 +71,8 @@ builder.Services.AddControllers();
 ...
 
 ```
+<br/>
+
 ## **2. Requests**
 ---
 Requests must be implement one of them that **IRequest** or **IQuery** interfaces. Their handlers must be declared in it as "nested". **IRequestHandler** or **IQueryHandler** are handler interfaces of requests.<br/><br/>
@@ -90,6 +92,7 @@ public partial class CreateProductCommand : IRequest<Product>
         public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand>
         {
             private IProductRepository _repo;
+
             public CreateProductCommandHandler(IProductRepository repo)
             {
                 _repo = repo;
@@ -133,3 +136,31 @@ public partial class GetProductByIdQuery : IQuery<Product>
 }
 
 ```
+Queries have differences according to requests on handling. **IQueryHandler<TQuery,TResponse>**
+
+>TResponse : Return type of query.
+
+<br/>
+
+## **3. Interceptors**
+---
+
+Interceptors are as you know by their name work when handler's handle method run. This library's middleware receive the request and  return a object that implements **IMiddlewareResponse** interface. We can input objects what you want to this response object and also can use for run specific operation on request's handler operations.
+
+<br/>
+
+For declare a interceptor you can use **RequestInterceptor** abstract class by inherit from it. This class has four virtual method.
+
+<br/>
+
+>--
+>
+> **OnBefore :** Include code block going to run on handle methods before
+>
+> **OnException :** If any exception occured in handle method, Included code blocks going to run.
+>
+> **OnSuccess :** That specified code blocks will be finished as succeed handle method operation otherwise on exception state this'll not run.
+>
+> **OnAfter :** 
+> 
+>--
