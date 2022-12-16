@@ -36,7 +36,7 @@ namespace CQRService.Middleware.States.Concrete
                 invocation.Results.Errors = _exceptionHandler.GetErrorsAndClear().ToList();
 
             this._arguments.SetOperationResult(invocation.Results);
-            this._middleware.TransitionTo(new MiddlewareResponseState(this._arguments));
+            _middleware.TransitionTo(new MiddlewareResponseState(this._arguments));
 
         }
 

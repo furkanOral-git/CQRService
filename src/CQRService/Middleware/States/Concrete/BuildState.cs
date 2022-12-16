@@ -22,8 +22,8 @@ namespace CQRService.Middleware.States.Concrete
             : Array.Empty<RequestInterceptor>();
 
             if (invocationArguments.HasInterceptors)
-                this._middleware.TransitionTo(new ExecutionWithInterceptionState(this._arguments));
-            else this._middleware.TransitionTo(new ExecutionState(this._arguments));
+                _middleware.TransitionTo(new ExecutionWithInterceptionState(this._arguments));
+            else _middleware.TransitionTo(new ExecutionState(this._arguments));
 
         }
 

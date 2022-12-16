@@ -23,7 +23,7 @@ namespace CQRService.Middleware.States.Concrete
 
             IfHasAspectSetTrue(invocationArguments);
 
-            this._middleware.TransitionTo(new BuildState(this._arguments));
+            _middleware.TransitionTo(new BuildState(this._arguments));
         }
 
         private void IfHasAspectSetTrue(InvocationArguments arguments)

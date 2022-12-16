@@ -5,9 +5,8 @@ using System.Threading.Tasks;
 
 namespace CQRService.MiddlewareContainer.Entities
 {
-    internal class ServiceRegister
+    internal class ServiceRegister : ContainerEntity
     {
-        public Guid InstanceId { get; init; }
         public Type SourceType { get; init; }
         public Type ImplementationType { get; private set; }
         public RegistrationType RegistrationType { get; private set; }

@@ -5,6 +5,7 @@ using System.Net;
 using System.Threading.Tasks;
 using CQRService.Entities.ExceptionHandling;
 using CQRService.Entities.Interceptors;
+using CQRService.ExceptionHandling;
 
 namespace CQRService.Runtime.Interceptors
 {

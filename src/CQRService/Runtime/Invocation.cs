@@ -8,7 +8,6 @@ using CQRService.Entities.Interceptors;
 using CQRService.Entities.Middleware;
 using CQRService.ExceptionHandling;
 using CQRService.ExceptionHandling.RuntimeExceptions;
-using CQRService.MiddlewareContainer.DistributionControllers;
 using CQRService.Runtime.Interceptors;
 
 namespace CQRService.Runtime
@@ -20,9 +19,9 @@ namespace CQRService.Runtime
         public object HandlerObject { get; init; }
         public OperationResult Results { get; init; }
         private IExceptionHandler _handler;
-        private IRuntimeDistributionController _serviceProvider;
+        private IRuntimeServiceProvider _serviceProvider;
 
-        public Invocation(object request, object handler, MethodInfo handleMethod, IRuntimeDistributionController serviceProvider)
+        public Invocation(object request, object handler, MethodInfo handleMethod, IRuntimeServiceProvider serviceProvider)
         {
             Request = request;
             HandlerObject = handler;

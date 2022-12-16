@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CQRService.ExceptionHandling;
-using CQRService.MiddlewareContainer.DistributionControllers;
+using CQRService.MiddlewareContainer;
 
 namespace CQRService.Runtime.Interceptors
 {
@@ -11,15 +11,13 @@ namespace CQRService.Runtime.Interceptors
     public abstract class RequestInterceptorBase : Attribute
     {
         public virtual int PriortyIndex { get; set; }
-        internal IExceptionHandler ExceptionHandler { get; init; }
+        internal IExceptionHandler ExceptionHandler { get; private set; }
 
-        protected internal RequestInterceptorBase()
+        protected RequestInterceptorBase()
         {
-            if (ExceptionHandler is null)
-            {
-                ExceptionHandler = (IExceptionHandler)BaseContainerDistributionController
-                .GetServiceOnRuntimeStatic(typeof(IExceptionHandler));
-            }
-        }
+            var provider = (IRuntimeServiceProvider)ContainerServiceProvider.GetProvider();
+            ExceptionHandler = (IExceptionHandler)provider.GetServiceOnRuntime(typeof(IExceptionHandler));
+        }   
+
     }
 }

@@ -155,12 +155,12 @@ For declare a interceptor you can use **RequestInterceptor** abstract class by i
 
 >--
 >
-> **OnBefore :** Include code block going to run on handle methods before
+> **OnBefore :** Included code block going to run on handle methods before
 >
 > **OnException :** If any exception occured in handle method, Included code blocks going to run.
 >
 > **OnSuccess :** That specified code blocks will be finished as succeed handle method operation otherwise on exception state this'll not run.
 >
-> **OnAfter :** 
+> **OnAfter :** Included code block going to run at the end of the handle method operation
 > 
 >--

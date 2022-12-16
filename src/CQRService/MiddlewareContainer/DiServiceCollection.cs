@@ -1,24 +1,24 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using CQRService.ExceptionHandling.MiddlewareContainerExceptions;
-using CQRService.MiddlewareContainer.DistributionControllers;
 using CQRService.MiddlewareContainer.Entities;
-using CQRService.MiddlewareContainer.RegistrationControllers;
+using CQRService.MiddlewareContainer.Factories.Abstract;
+using CQRService.MiddlewareContainer.Factories.Concrete;
 
 namespace CQRService.MiddlewareContainer
 {
     public class DiServiceCollection : IDiServiceCollection
     {
-        private ContainerRegistrationController _registrationController;
+        private IServiceRegisterFactory _factory;
         private static DiServiceCollection _instance;
-        
+
 
         private DiServiceCollection()
         {
-            _registrationController = (ContainerRegistrationController)BaseContainerDistributionController
-            .GetServiceStatic(typeof(ContainerRegistrationController));
+            _factory = ServiceRegisterFactory.GetFactory();
         }
         public static DiServiceCollection InitServiceCollection()
         {
@@ -32,19 +32,22 @@ namespace CQRService.MiddlewareContainer
         where TImplementation : class
         {
             VerifyTypeForIsNotAbstract(typeof(TImplementation));
-
-            var guid = Guid.NewGuid();
-            var serviceRegister = _registrationController.CreateServiceRegisterIfNotExistAndReturn
+            Guid id = Guid.NewGuid();
+            bool IsNew;
+            var serviceRegister = _factory.GetServiceRegister
             (
-                guid,
+                id,
                 null,
                 typeof(TImplementation),
-                RegistrationType.Singleton
+                RegistrationType.Singleton,
+                out IsNew
             );
-            if (serviceRegister.InstanceId != guid)
+            if (!IsNew)
             {
-                _registrationController.UpdateServiceRegister(serviceRegister.InstanceId, typeof(TImplementation), RegistrationType.Singleton);
+                serviceRegister.UpdateRegistrationType(RegistrationType.Singleton);
+                _factory.UpdateServiceRegister(serviceRegister);
             }
+
 
         }
 
@@ -52,19 +55,22 @@ namespace CQRService.MiddlewareContainer
         where TImplementation : class
         {
             VerifyTypeForIsNotAbstract(typeof(TImplementation));
-
-            var guid = Guid.NewGuid();
-            var serviceRegister = _registrationController.CreateServiceRegisterIfNotExistAndReturn
+            Guid id = Guid.NewGuid();
+            bool IsNew;
+            var serviceRegister = _factory.GetServiceRegister
             (
-                guid,
+                id,
                 null,
                 typeof(TImplementation),
-                RegistrationType.Transient
+                RegistrationType.Transient,
+                out IsNew
             );
-            if (serviceRegister.InstanceId != guid)
+            if (!IsNew)
             {
-                _registrationController.UpdateServiceRegister(serviceRegister.InstanceId, typeof(TImplementation), RegistrationType.Transient);
+                serviceRegister.UpdateRegistrationType(RegistrationType.Transient);
+                _factory.UpdateServiceRegister(serviceRegister);
             }
+
         }
 
         public void AddSingleton<TSource, TImplementation>()
@@ -72,19 +78,22 @@ namespace CQRService.MiddlewareContainer
         where TImplementation : class, TSource
         {
             VerifyTypeForIsNotAbstract(typeof(TImplementation));
-
-            var guid = Guid.NewGuid();
-            var serviceRegister = _registrationController.CreateServiceRegisterIfNotExistAndReturn
+            Guid id = Guid.NewGuid();
+            bool IsNew;
+            var serviceRegister = _factory.GetServiceRegister
             (
-                guid,
+                id,
                 typeof(TSource),
                 typeof(TImplementation),
-                RegistrationType.Singleton
+                RegistrationType.Singleton,
+                out IsNew
             );
-            if (serviceRegister.InstanceId != guid)
+            if (!IsNew)
             {
-                _registrationController.UpdateServiceRegister(serviceRegister.InstanceId, typeof(TImplementation), RegistrationType.Singleton);
+                serviceRegister.UpdateRegistrationType(RegistrationType.Singleton);
+                _factory.UpdateServiceRegister(serviceRegister);
             }
+
         }
 
         public void AddTransient<TSource, TImplementation>()
@@ -92,19 +101,22 @@ namespace CQRService.MiddlewareContainer
         where TImplementation : class, TSource
         {
             VerifyTypeForIsNotAbstract(typeof(TImplementation));
-
-            var guid = Guid.NewGuid();
-            var serviceRegister = _registrationController.CreateServiceRegisterIfNotExistAndReturn
+            Guid id = Guid.NewGuid();
+            bool IsNew;
+            var serviceRegister = _factory.GetServiceRegister
             (
-                guid,
+                id,
                 typeof(TSource),
                 typeof(TImplementation),
-                RegistrationType.Transient
+                RegistrationType.Transient,
+                out IsNew
             );
-            if (serviceRegister.InstanceId != guid)
+            if (!IsNew)
             {
-                _registrationController.UpdateServiceRegister(serviceRegister.InstanceId, typeof(TImplementation), RegistrationType.Transient);
+                serviceRegister.UpdateRegistrationType(RegistrationType.Transient);
+                _factory.UpdateServiceRegister(serviceRegister);
             }
+
         }
         private void VerifyTypeForIsNotAbstract(Type type)
         {
@@ -114,5 +126,7 @@ namespace CQRService.MiddlewareContainer
                 (MiddlewareContainerExceptionMessages.AbstractImplementationTypeMessage + $"AbstractImplementationType : {type.Name}");
             }
         }
+
+
     }
 }

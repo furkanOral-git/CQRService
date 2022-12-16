@@ -1,7 +1,6 @@
 using System.Reflection;
 using CQRService.Entities.ExceptionHandling;
 using CQRService.ExceptionHandling;
-using CQRService.MiddlewareContainer.DistributionControllers;
 using CQRService.Runtime;
 
 namespace CQRService.Middleware.States.Concrete
@@ -49,7 +48,7 @@ namespace CQRService.Middleware.States.Concrete
 
 
             this._arguments.SetOperationResult(invocation.Results);
-            this._middleware.TransitionTo(new MiddlewareResponseState(this._arguments));
+            _middleware.TransitionTo(new MiddlewareResponseState(this._arguments));
         }
     }
 }

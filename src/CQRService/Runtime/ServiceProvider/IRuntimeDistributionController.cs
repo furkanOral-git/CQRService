@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Linq;
 using System.Threading.Tasks;
-using CQRService.MiddlewareContainer.DistributionControllers;
+using CQRService.MiddlewareContainer;
 
 namespace CQRService.Runtime
 {
-    internal interface IRuntimeDistributionController : IDistributionController
+    internal interface IRuntimeServiceProvider : IDiServiceProvider
     {
-         internal protected object GetServiceOnRuntime(Type sourceType);
+         internal object GetServiceOnRuntime(Type sourceType);
     }
 }

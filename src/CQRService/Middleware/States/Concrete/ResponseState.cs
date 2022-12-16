@@ -33,8 +33,8 @@ namespace CQRService.Middleware.States.Concrete
                 response = CreateErrorResponse(results);
             }
 
-            this._middleware.SetMiddlewareResponse(response);
-            this._middleware.ClearState();
+            _middleware.SetMiddlewareResponse(response);
+            _middleware.ClearState();
         }
         private MiddlewareErrorResponse CreateErrorResponse(OperationResult result)
         {

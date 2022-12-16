@@ -6,14 +6,12 @@ using System.Threading.Tasks;
 
 namespace CQRService.MiddlewareContainer.Entities
 {
-    internal class ServiceInstance
+    internal class ServiceInstance : ContainerEntity
     {
-        public Guid InstanceId { get; private set; }
         public object Instance { get; private set; }
         
-        public ServiceInstance(Guid id, object instance)
+        public ServiceInstance(Guid id)
         {
-            Instance = instance;
             InstanceId = id;
         }
         public void UpdateInstance(object newInstance)
