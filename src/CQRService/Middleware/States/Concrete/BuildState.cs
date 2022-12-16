@@ -1,4 +1,5 @@
 
+using CQRService.ExceptionHandling.MiddlewareExceptions;
 using CQRService.Runtime.Interceptors;
 
 namespace CQRService.Middleware.States.Concrete
@@ -15,6 +16,7 @@ namespace CQRService.Middleware.States.Concrete
         {
             var invocationArguments = this._arguments.GetInvocationArguments();
             invocationArguments.Handler = _serviceProvider.GetService(invocationArguments.HandlerType);
+            
 
             var requestType = invocationArguments.RequestType;
             invocationArguments.Interceptors = (invocationArguments.HasInterceptors)

@@ -10,5 +10,6 @@ namespace CQRService.ExceptionHandling.MiddlewareExceptions
         public static string MissingCollectiveArgumentMessage = "";
         public static string MissingHandlerArgumentMessage = "";
         public static string NotMatchedArgumentException = "";
+        public static string InCorrectRegistrationForm="";
     }
 }

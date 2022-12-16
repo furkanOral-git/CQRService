@@ -30,7 +30,7 @@ namespace CQRService.MiddlewareContainer
         }
         public object GetService(Type sourceType)
         {
-            var serviceRegister = _container.RegisteredTypes.SingleOrDefault(r => r.SourceType == sourceType);
+            var serviceRegister = _container.RegisteredTypes.SingleOrDefault(r => r.SourceType == sourceType || r.ImplementationType == sourceType);
             if (serviceRegister is null)
             {
                 throw new NotRegisteredTypeException(MiddlewareContainerExceptionMessages.NotRegisteredTypeExceptionMessage);
@@ -86,9 +86,13 @@ namespace CQRService.MiddlewareContainer
             {
                 throw new NotRegisteredTypeException(MiddlewareContainerExceptionMessages.NotRegisteredTypeExceptionMessage);
             }
-            return _container.Instances.Single(i => i.InstanceId == serviceRegister.InstanceId).Instance;
+            var serviceInstance = _factory.GetServiceInstance(serviceRegister.InstanceId);
+            if (serviceInstance.Instance is null)
+            {
+                return GetService(serviceRegister.ImplementationType);
+            }
+            return serviceInstance.Instance;
         }
-
         public TService GetService<TService>() where TService : class
         {
             return (TService)GetService(typeof(TService));
