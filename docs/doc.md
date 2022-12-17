@@ -15,7 +15,7 @@
 
 ## **1. Service Registration**
 ---
-This library use its own dependency injection module for minimal dependency to other projects. All handlers will get their dependencies from  **ContainerDistributionController** class. This class inherited from **IDistributionController**.
+This library use its own dependency injection module for minimal dependency to other projects. All handlers will get their dependencies from  **ContainerServiceProvider** class. This class inherited from **IDiServiceProvider**.
 Service registration operations are manage by **DiServiceCollection** class that implements **IDiServiceCollection**.
 
 <br>

@@ -44,7 +44,6 @@ namespace CQRService.MiddlewareContainer
             );
             if (!IsNew)
             {
-                serviceRegister.UpdateRegistrationType(RegistrationType.Singleton);
                 _factory.UpdateServiceRegister(serviceRegister);
             }
 
@@ -67,7 +66,6 @@ namespace CQRService.MiddlewareContainer
             );
             if (!IsNew)
             {
-                serviceRegister.UpdateRegistrationType(RegistrationType.Transient);
                 _factory.UpdateServiceRegister(serviceRegister);
             }
 
@@ -90,7 +88,6 @@ namespace CQRService.MiddlewareContainer
             );
             if (!IsNew)
             {
-                serviceRegister.UpdateRegistrationType(RegistrationType.Singleton);
                 _factory.UpdateServiceRegister(serviceRegister);
             }
 
@@ -113,7 +110,6 @@ namespace CQRService.MiddlewareContainer
             );
             if (!IsNew)
             {
-                serviceRegister.UpdateRegistrationType(RegistrationType.Transient);
                 _factory.UpdateServiceRegister(serviceRegister);
             }
 

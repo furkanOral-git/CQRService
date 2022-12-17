@@ -7,11 +7,11 @@ namespace CQRService.Middleware
     {
         private static RequestMiddleware? _instance;
         private MiddlewareState? _state;
-        private IMiddlewareResponse? _middlewareResponse;
+        private IMiddlewareResponse _middlewareResponse;
 
         private RequestMiddleware()
         {
-
+            _middlewareResponse = default;
         }
         public static RequestMiddleware Get()
         {
@@ -25,7 +25,7 @@ namespace CQRService.Middleware
         {
             this._middlewareResponse = response;
         }
-        public IMiddlewareResponse? GetMiddlewareResponse()
+        public IMiddlewareResponse GetMiddlewareResponse()
         {
             var response = this._middlewareResponse;
             ClearResponse();

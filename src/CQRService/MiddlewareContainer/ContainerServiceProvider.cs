@@ -81,7 +81,7 @@ namespace CQRService.MiddlewareContainer
 
         object IRuntimeServiceProvider.GetServiceOnRuntime(Type sourceType)
         {
-            var serviceRegister = _container.RegisteredTypes.SingleOrDefault(r => r.SourceType == sourceType);
+            var serviceRegister = _container.RegisteredTypes.SingleOrDefault(r => r.SourceType == sourceType || r.ImplementationType == sourceType);
             if (serviceRegister is null)
             {
                 throw new NotRegisteredTypeException(MiddlewareContainerExceptionMessages.NotRegisteredTypeExceptionMessage);
