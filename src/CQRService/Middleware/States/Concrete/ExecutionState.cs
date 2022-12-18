@@ -43,10 +43,11 @@ namespace CQRService.Middleware.States.Concrete
             }
 
             if (_exceptionHandler.HasError())
-                invocation.Results.Errors = _exceptionHandler.GetErrorsAndClear().ToList();
-            invocation.Results.IsOperationSuccess = false;
-
-
+            {
+                invocation.Results.Errors = _exceptionHandler.GetErrors();
+                invocation.Results.IsOperationSuccess = false;
+            }
+              
             this._arguments.SetOperationResult(invocation.Results);
             _middleware.TransitionTo(new MiddlewareResponseState(this._arguments));
         }

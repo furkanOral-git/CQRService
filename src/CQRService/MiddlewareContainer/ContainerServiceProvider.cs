@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http.Headers;
-using System.Reflection.Metadata.Ecma335;
 using System.Threading.Tasks;
 using CQRService.ExceptionHandling.MiddlewareContainerExceptions;
 using CQRService.MiddlewareContainer.Entities;
@@ -35,7 +33,7 @@ namespace CQRService.MiddlewareContainer
             {
                 throw new NotRegisteredTypeException(MiddlewareContainerExceptionMessages.NotRegisteredTypeExceptionMessage);
             }
-            var args = GetArgs(serviceRegister.ImplementationType);
+            var args = GetArgs(serviceRegister.ImplementationType, (serviceRegister.IsInternal) ? GetServiceOnRuntimeBase : GetService);
             var serviceInstance = _factory.GetServiceInstance(serviceRegister.InstanceId);
             return GetInstanceByRegisterType(serviceRegister, serviceInstance, args);
         }
@@ -65,7 +63,7 @@ namespace CQRService.MiddlewareContainer
             }
             return instance;
         }
-        private object[]? GetArgs(Type impType)
+        private object[]? GetArgs(Type impType, Func<Type, object> selectOperation)
         {
             var parameterInfos = impType
             .GetConstructors()[0]
@@ -74,12 +72,11 @@ namespace CQRService.MiddlewareContainer
             var hasArgs = (parameterInfos.Length != 0) ? true : false;
             if (hasArgs)
             {
-                return parameterInfos.Select(p => p.ParameterType).Select(t => GetService(t)).ToArray();
+                return parameterInfos.Select(p => p.ParameterType).Select(t => selectOperation.Invoke(t)).ToArray();
             }
             return default;
         }
-
-        object IRuntimeServiceProvider.GetServiceOnRuntime(Type sourceType)
+        private object GetServiceOnRuntimeBase(Type sourceType)
         {
             var serviceRegister = _container.RegisteredTypes.SingleOrDefault(r => r.SourceType == sourceType || r.ImplementationType == sourceType);
             if (serviceRegister is null)
@@ -89,9 +86,15 @@ namespace CQRService.MiddlewareContainer
             var serviceInstance = _factory.GetServiceInstance(serviceRegister.InstanceId);
             if (serviceInstance.Instance is null)
             {
-                return GetService(serviceRegister.ImplementationType);
+                var args = GetArgs(serviceRegister.ImplementationType, GetServiceOnRuntimeBase);
+                var instance = Activator.CreateInstance(serviceRegister.ImplementationType, args ?? null);
+                serviceInstance.UpdateInstance(instance);
             }
             return serviceInstance.Instance;
+        }
+        object IRuntimeServiceProvider.GetServiceOnRuntime(Type sourceType)
+        {
+            return GetServiceOnRuntimeBase(sourceType);
         }
         public TService GetService<TService>() where TService : class
         {

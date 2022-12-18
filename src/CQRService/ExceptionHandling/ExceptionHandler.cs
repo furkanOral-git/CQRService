@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Net;
 using CQRService.Entities.ExceptionHandling;
@@ -8,11 +9,11 @@ namespace CQRService.ExceptionHandling
 {
     public sealed class ExceptionHandler : IExceptionHandler
     {
-        internal IEnumerable<ErrorResult> Errors { get; set; }
+        internal ErrorResult[] Errors { get; set; }
 
         public ExceptionHandler()
         {
-            Errors = Enumerable.Empty<ErrorResult>();
+            Errors = Array.Empty<ErrorResult>();
         }
 
 
@@ -30,7 +31,10 @@ namespace CQRService.ExceptionHandling
         }
         public void ContinueWith(ErrorResult error)
         {
-            Errors.ToList().Add(error);
+            var array = Errors;
+            Array.Resize<ErrorResult>(ref array, array.Length + 1);
+            array[array.Length - 1] = error;
+            Errors = array;
         }
         public void ThrowAndExit(ErrorResult error)
         {
@@ -41,18 +45,10 @@ namespace CQRService.ExceptionHandling
             if (Errors.Count() > 0) return true;
             return false;
         }
-        public IEnumerable<ErrorResult> GetErrorsAndClear()
+
+        public ErrorResult[] GetErrors()
         {
-            var list = new List<ErrorResult>();
-            foreach (var err in Errors)
-            {
-                list.Add(err);
-            }
-            Errors.ToList().Clear();
-            return list;
+            return Errors;
         }
-
-
-
     }
 }

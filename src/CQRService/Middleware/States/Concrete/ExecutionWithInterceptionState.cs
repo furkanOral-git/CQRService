@@ -16,7 +16,7 @@ namespace CQRService.Middleware.States.Concrete
             var invocationArguments = this._arguments.GetInvocationArguments();
             var aspects = invocationArguments.Interceptors;
             var invocation = InvocationProvider.CreateInvocation(invocationArguments, _serviceProvider);
-            
+
 
             invocation.Results.IsOperationSuccess = true;
             try
@@ -32,8 +32,11 @@ namespace CQRService.Middleware.States.Concrete
                 var error = _exceptionHandler.CreateErrorResult("Throwed Exception", e, "ExecutionWithInterceptionState");
                 invocation.ContinueWith(error);
             }
+            
             if (_exceptionHandler.HasError())
-                invocation.Results.Errors = _exceptionHandler.GetErrorsAndClear().ToList();
+            {
+                invocation.Results.Errors = _exceptionHandler.GetErrors();
+            }
 
             this._arguments.SetOperationResult(invocation.Results);
             _middleware.TransitionTo(new MiddlewareResponseState(this._arguments));

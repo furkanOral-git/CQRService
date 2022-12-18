@@ -55,7 +55,10 @@ namespace CQRService.Runtime
         }
         public void Return(InterceptorResult interceptorResult)
         {
-            Results.AspectResults.ToList().Add(interceptorResult);
+            var array = Results.AspectResults;
+            Array.Resize<InterceptorResult>(ref array, array.Length + 1);
+            array[array.Length - 1] = interceptorResult;
+            Results.AspectResults = array;
         }
         public void ThrowAndExit(ErrorResult error)
         {

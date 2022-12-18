@@ -2,6 +2,7 @@ using System.Linq.Expressions;
 using System.Text.Json;
 using CQRService.Entities.BaseInterfaces;
 using CQRService.Entities.ExceptionHandling;
+using CQRService.Entities.Interceptors;
 using CQRService.Middleware;
 using CQRService.Middleware.Responses;
 using CQRService.Middleware.Responses.ErrorResults;
@@ -9,6 +10,7 @@ using CQRService.Middleware.Responses.SuccessResults;
 using CQRService.Middleware.States;
 using CQRService.Middleware.States.Concrete;
 using CQRService.Runtime;
+using CQRService.Runtime.Interceptors;
 
 namespace CQRService.RequestSenderService
 {
@@ -104,16 +106,39 @@ namespace CQRService.RequestSenderService
             }
             return false;
         }
-        public static ErrorResult[] GetErrors(this IMiddlewareDataResponse response)
+        public static ErrorResult[] GetErrors(this IMiddlewareResponse response)
         {
             var castedResponse = (MiddlewareErrorResponse)response;
             return castedResponse.Errors;
         }
+        public static InterceptorResult[]? GetAllInterceptorResultsByDataType<TResult>(this IMiddlewareResponse response)
+        {
+            var castedResponse = (MiddlewareBaseResponse)response;
+            if (castedResponse.IsSuccess)
+            {
+                return castedResponse.AspectResults
+                .Where(i => i.AspectData.GetType().IsAssignableTo(typeof(TResult)))
+                .ToArray();
+            }
+            return castedResponse.AspectResults;
+        }
+        public static InterceptorResult[] GetAllInterceptorResultsByCreatorType<TInterceptor>(this IMiddlewareResponse response)
+        where TInterceptor : RequestInterceptor
+        {
+            var castedResponse = (MiddlewareBaseResponse)response;
+            if (castedResponse.IsSuccess)
+            {
+                return castedResponse.AspectResults
+                .Where(i => i.AspectType == nameof(TInterceptor))
+                .ToArray();
+            }
+            return castedResponse.AspectResults;
+        }
 
-        
-    
-    
-    
+
+
+
+
     }
 
 }

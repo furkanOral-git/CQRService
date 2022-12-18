@@ -4,7 +4,7 @@ using CQRService.Entities.Interceptors;
 
 namespace CQRService.Middleware.Responses
 {
-    public abstract class MiddlewareBaseResponse
+    public abstract class MiddlewareBaseResponse 
     {
         public string Title { get; init; }
         public bool IsSuccess { get; init; }

@@ -1,5 +1,3 @@
-
-
 using CQRService.Runtime;
 using CQRService.Runtime.Interceptors;
 
