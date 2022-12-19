@@ -12,7 +12,7 @@ namespace CQRService.Middleware.States
         protected static RequestMiddleware _middleware;
         protected StateArguments _arguments;
         protected static ErrorStack _errorStack;
-        protected static InterceptorResultStack _resultStack;
+        protected InterceptorResultStack _resultStack;
         protected static IRuntimeServiceProvider _serviceProvider;
 
 
@@ -26,8 +26,7 @@ namespace CQRService.Middleware.States
         {
             _middleware = RequestMiddleware.Get();
             _serviceProvider = ContainerServiceProvider.GetProvider();
-            _errorStack = _serviceProvider.GetService<ErrorStack>();
-            _resultStack = _serviceProvider.GetService<InterceptorResultStack>();
+            
         }
 
         public abstract void Main();

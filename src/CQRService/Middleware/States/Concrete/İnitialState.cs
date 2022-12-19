@@ -1,3 +1,5 @@
+using CQRService.Entities.ExceptionHandling;
+using CQRService.Entities.Interceptors;
 using CQRService.Runtime;
 using CQRService.Runtime.Interceptors;
 
@@ -9,7 +11,8 @@ namespace CQRService.Middleware.States.Concrete
 
         public İnitialState(StateArguments args) : base(args)
         {
-
+            _errorStack = _serviceProvider.GetService<ErrorStack>();
+            _resultStack = _serviceProvider.GetService<InterceptorResultStack>();
         }
         public override void Main()
         {
