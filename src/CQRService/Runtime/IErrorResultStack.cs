@@ -15,5 +15,6 @@ namespace CQRService.Runtime
         public void AddErrorAndExit(ErrorResult error);
         public void AddErrorAndExit(string title, Exception e, string sender, HttpStatusCode status = HttpStatusCode.BadRequest);
         public ErrorResult CreateError(string title, Exception e, string sender, HttpStatusCode status = HttpStatusCode.BadRequest);
+        public int Count { get;}
     }
 }

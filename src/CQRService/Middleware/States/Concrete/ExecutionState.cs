@@ -31,8 +31,6 @@ namespace CQRService.Middleware.States.Concrete
 
                 if (exception.GetType() == typeof(ExitFromProcess))
                 {
-                    var exit = (ExitFromProcess)exception;
-                    _errorStack.AddErrorResult(exit.Error);
                     invocation.Results.IsOperationSuccess = false;
                 }
                 else

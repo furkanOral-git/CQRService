@@ -18,7 +18,7 @@ namespace CQRS.Runtime.Extensions
             {
                 interceptors[i].OnBefore(interception);
                 var invocation = (Invocation)interception;
-                if (!invocation.Results.IsOperationSuccess) throw new ExitFromProcess("Continue With Error And Exit !");
+                if (invocation.ErrorStack.Count > 0) throw new ExitFromProcess("Continue With Error And Exit !");
             }
         }
         public static void OnAfterOperations(this RequestInterceptor[] interceptors, IInterceptionAfter interception)
@@ -27,7 +27,7 @@ namespace CQRS.Runtime.Extensions
             {
                 interceptors[i].OnAfter(interception);
                 var invocation = (Invocation)interception;
-                if (!invocation.Results.IsOperationSuccess) throw new ExitFromProcess("Continue With Error And Exit !");
+                if (invocation.ErrorStack.Count > 0) throw new ExitFromProcess("Continue With Error And Exit !");
             }
         }
         public static void OnExceptionOperations(this RequestInterceptor[] interceptors, IInterceptionException interception, Exception e)
@@ -36,7 +36,7 @@ namespace CQRS.Runtime.Extensions
             {
                 interceptors[i].OnException(interception, e);
                 var invocation = (Invocation)interception;
-                if (!invocation.Results.IsOperationSuccess) throw new ExitFromProcess("Continue With Error And Exit !");
+                if (invocation.ErrorStack.Count > 0) throw new ExitFromProcess("Continue With Error And Exit !");
             }
         }
         public static void OnSuccessOperations(this RequestInterceptor[] interceptors, IInterceptionSuccess interception)
@@ -45,7 +45,7 @@ namespace CQRS.Runtime.Extensions
             {
                 interceptors[i].OnSuccess(interception);
                 var invocation = (Invocation)interception;
-                if (!invocation.Results.IsOperationSuccess) throw new ExitFromProcess("Continue With Error And Exit !");
+                if (invocation.ErrorStack.Count > 0) throw new ExitFromProcess("Continue With Error And Exit !");
             }
         }
         public static void StartOperation(this RequestInterceptor[] aspects, ref Invocation invocation)

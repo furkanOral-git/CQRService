@@ -25,7 +25,6 @@ namespace CQRService.Middleware.States.Concrete
             }
             catch (ExitFromProcess e)
             {
-                _errorStack.AddErrorResult(e.Error);
                 invocation.Results.IsOperationSuccess = false;
             }
             catch (Exception e)
