@@ -1,5 +1,4 @@
 
-using CQRService.ExceptionHandling.MiddlewareExceptions;
 using CQRService.Runtime.Interceptors;
 
 namespace CQRService.Middleware.States.Concrete

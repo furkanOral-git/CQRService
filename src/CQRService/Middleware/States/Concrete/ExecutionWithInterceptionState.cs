@@ -15,7 +15,7 @@ namespace CQRService.Middleware.States.Concrete
         {
             var invocationArguments = this._arguments.GetInvocationArguments();
             var aspects = invocationArguments.Interceptors;
-            var invocation = InvocationProvider.CreateInvocation(invocationArguments, _serviceProvider);
+            var invocation = InvocationProvider.CreateInvocation(invocationArguments, _serviceProvider, _errorStack, _resultStack);
 
 
             invocation.Results.IsOperationSuccess = true;
@@ -25,17 +25,13 @@ namespace CQRService.Middleware.States.Concrete
             }
             catch (ExitFromProcess e)
             {
-                invocation.ContinueWith(e.Error);
+                _errorStack.AddErrorResult(e.Error);
+                invocation.Results.IsOperationSuccess = false;
             }
             catch (Exception e)
             {
-                var error = _exceptionHandler.CreateErrorResult("Throwed Exception", e, "ExecutionWithInterceptionState");
-                invocation.ContinueWith(error);
-            }
-            
-            if (_exceptionHandler.HasError())
-            {
-                invocation.Results.Errors = _exceptionHandler.GetErrors();
+                _errorStack.AddErrorResult("Throwed Exception", e, nameof(ExecutionWithInterceptionState));
+                invocation.Results.IsOperationSuccess = false;
             }
 
             this._arguments.SetOperationResult(invocation.Results);

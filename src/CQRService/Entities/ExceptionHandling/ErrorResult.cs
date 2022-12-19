@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace CQRService.Entities.ExceptionHandling
 {
-    public record ErrorResult(
+    public record struct ErrorResult(
     string Title,
-    string CatcherType,
+    string Sender,
     string ErrorMessage,
     string ExceptionType,
     HttpStatusCode Status);

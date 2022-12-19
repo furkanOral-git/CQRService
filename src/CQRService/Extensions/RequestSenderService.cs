@@ -55,85 +55,9 @@ namespace CQRService.RequestSenderService
             }
             return false;
         }
-        public static bool TryGetErrorResultByCatcher<T>(this IMiddlewareResponse response, out ErrorResult? error)
-        where T : class
-        {
-
-            if (response.TryGetErrorResultBase(e => e.CatcherType == nameof(T), out error))
-            {
-                return true;
-            }
-            return false;
-        }
-        private static bool TryGetErrorResultBase(this IMiddlewareResponse response, Expression<Func<ErrorResult, bool>> filter, out ErrorResult? error)
-        {
-            var castedResponse = (MiddlewareErrorResponse)response;
-            var errors = castedResponse.Errors;
-            if (errors.Any(filter.Compile()))
-            {
-                error = errors.First(filter.Compile());
-                return true;
-            }
-            error = null;
-            return false;
-        }
-        private static bool TryGetErrorResultsBase(this IMiddlewareResponse response, Expression<Func<ErrorResult, bool>> filter, out ErrorResult[]? errors)
-        {
-            var castedResponse = (MiddlewareErrorResponse)response;
-            var errorss = castedResponse.Errors;
-            if (errorss.Any(filter.Compile()))
-            {
-                errors = errorss.Where(filter.Compile()).ToArray();
-                return true;
-            }
-            errors = null;
-            return false;
-        }
-        public static bool TryGetErrorResultsByCatcher<T>(this IMiddlewareResponse response, out ErrorResult[]? errors)
-        {
-            if (response.TryGetErrorResultsBase(e => e.CatcherType == nameof(T), out errors))
-            {
-                return true;
-            }
-            return false;
-        }
-        public static bool TryGetErrorResultByException<TException>(this IMiddlewareResponse response, out ErrorResult? error)
-        where TException : Exception
-        {
-            if (response.TryGetErrorResultBase(e => e.ExceptionType == nameof(TException), out error))
-            {
-                return true;
-            }
-            return false;
-        }
-        public static ErrorResult[] GetErrors(this IMiddlewareResponse response)
-        {
-            var castedResponse = (MiddlewareErrorResponse)response;
-            return castedResponse.Errors;
-        }
-        public static InterceptorResult[]? GetAllInterceptorResultsByDataType<TResult>(this IMiddlewareResponse response)
-        {
-            var castedResponse = (MiddlewareBaseResponse)response;
-            if (castedResponse.IsSuccess)
-            {
-                return castedResponse.AspectResults
-                .Where(i => i.AspectData.GetType().IsAssignableTo(typeof(TResult)))
-                .ToArray();
-            }
-            return castedResponse.AspectResults;
-        }
-        public static InterceptorResult[] GetAllInterceptorResultsByCreatorType<TInterceptor>(this IMiddlewareResponse response)
-        where TInterceptor : RequestInterceptor
-        {
-            var castedResponse = (MiddlewareBaseResponse)response;
-            if (castedResponse.IsSuccess)
-            {
-                return castedResponse.AspectResults
-                .Where(i => i.AspectType == nameof(TInterceptor))
-                .ToArray();
-            }
-            return castedResponse.AspectResults;
-        }
+       
+        
+        
 
 
 

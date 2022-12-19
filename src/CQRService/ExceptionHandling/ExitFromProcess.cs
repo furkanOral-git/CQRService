@@ -11,9 +11,9 @@ namespace CQRService.ExceptionHandling
         public ErrorResult Error { get; init; }
         public ExitFromProcess(string message) : base(message)
         {
-            
+
         }
-        public ExitFromProcess(ErrorResult error)
+        public ExitFromProcess(ErrorResult error) 
         {
             Error = error;
         }

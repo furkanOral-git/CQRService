@@ -33,9 +33,10 @@ namespace CQRService.MiddlewareContainer
             {
                 throw new NotRegisteredTypeException(MiddlewareContainerExceptionMessages.NotRegisteredTypeExceptionMessage);
             }
-            var args = GetArgs(serviceRegister.ImplementationType, (serviceRegister.IsInternal) ? GetServiceOnRuntimeBase : GetService);
+            var args = GetArgs(serviceRegister.ImplementationType,GetService);
             var serviceInstance = _factory.GetServiceInstance(serviceRegister.InstanceId);
             return GetInstanceByRegisterType(serviceRegister, serviceInstance, args);
+            
         }
         private object GetInstanceByRegisterType(ServiceRegister serviceRegister, ServiceInstance serviceInstance, object[]? args)
         {

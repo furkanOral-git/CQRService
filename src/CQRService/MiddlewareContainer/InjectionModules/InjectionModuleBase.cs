@@ -1,5 +1,7 @@
-using CQRService.ExceptionHandling;
-
+using CQRService.Entities.ExceptionHandling;
+using CQRService.Entities.Interceptors;
+using CQRService.Runtime;
+using CQRService.Runtime.Interceptors;
 
 namespace CQRService.MiddlewareContainer.InjectionModules
 {
@@ -9,7 +11,8 @@ namespace CQRService.MiddlewareContainer.InjectionModules
         internal static void AddCQRService()
         {
             var services = (IDiServiceCollection)DiServiceCollection.InitServiceCollection();
-            services.AddTransient<IExceptionHandler, ExceptionHandler>();
+            services.AddTransient<IErrorResultStack, ErrorStack>();
+            services.AddTransient<IInterceptorResultStack, InterceptorResultStack>();
         }
         static InjectionModuleBase()
         {

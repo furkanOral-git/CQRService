@@ -10,7 +10,6 @@ namespace CQRService.MiddlewareContainer.Entities
         public Type SourceType { get; init; }
         public Type ImplementationType { get; private set; }
         public RegistrationType RegistrationType { get; private set; }
-        public bool IsInternal { get; init; }
 
         public ServiceRegister(
         Guid instanceId,
@@ -22,7 +21,6 @@ namespace CQRService.MiddlewareContainer.Entities
             SourceType = sourceType ?? implementationType;
             ImplementationType = implementationType;
             RegistrationType = registrationType;
-            IsInternal = (ImplementationType.IsAssignableTo(typeof(IContainerService))) ? true : false;
         }
 
         public void UpdateImplementationType(Type newType)
@@ -33,14 +31,7 @@ namespace CQRService.MiddlewareContainer.Entities
         {
             RegistrationType = newType;
         }
-        public bool IsSourceTypeEqualImplementation()
-        {
-            if (SourceType == ImplementationType)
-            {
-                return true;
-            }
-            return false;
-        }
+       
     }
 
 }

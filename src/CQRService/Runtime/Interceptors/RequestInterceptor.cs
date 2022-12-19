@@ -10,11 +10,11 @@ namespace CQRService.Runtime.Interceptors
     {
         public RequestInterceptor() : base()
         {
-            
+
         }
         public virtual void OnBefore(IInterceptionBefore invocation) { }
         public virtual void OnAfter(IInterceptionAfter invocation) { }
         public virtual void OnSuccess(IInterceptionSuccess invocation) { }
-        public virtual void OnException(IInterceptionException invocation, Exception exception) { }
+        public virtual void OnException(IInterceptionException invocation, Exception e) { }
     }
 }

@@ -1,4 +1,6 @@
 
+using CQRService.Entities.ExceptionHandling;
+using CQRService.Entities.Interceptors;
 using CQRService.ExceptionHandling;
 using CQRService.MiddlewareContainer;
 using CQRService.Runtime;
@@ -9,7 +11,8 @@ namespace CQRService.Middleware.States
     {
         protected static RequestMiddleware _middleware;
         protected StateArguments _arguments;
-        protected static IExceptionHandler _exceptionHandler;
+        protected static ErrorStack _errorStack;
+        protected static InterceptorResultStack _resultStack;
         protected static IRuntimeServiceProvider _serviceProvider;
 
 
@@ -23,7 +26,8 @@ namespace CQRService.Middleware.States
         {
             _middleware = RequestMiddleware.Get();
             _serviceProvider = ContainerServiceProvider.GetProvider();
-            _exceptionHandler = (IExceptionHandler)_serviceProvider.GetServiceOnRuntime(typeof(IExceptionHandler));
+            _errorStack = _serviceProvider.GetService<ErrorStack>();
+            _resultStack = _serviceProvider.GetService<InterceptorResultStack>();
         }
 
         public abstract void Main();

@@ -12,16 +12,7 @@ namespace CQRService.Entities.Middleware
         public object? Response { get; set; }
         public bool IsReturned { get; set; }
         public bool IsOperationSuccess { get; set; }
-        public InterceptorResult[] AspectResults { get; set; }
-        public ErrorResult[] Errors { get; set; }
-
-        public OperationResult()
-        {
-            AspectResults = Array.Empty<InterceptorResult>();
-            Errors = Array.Empty<ErrorResult>();
-        }
         
-
 
     }
 }

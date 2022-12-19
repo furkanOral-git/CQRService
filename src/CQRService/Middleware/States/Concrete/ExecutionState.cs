@@ -8,16 +8,16 @@ namespace CQRService.Middleware.States.Concrete
 
     internal sealed class ExecutionState : MiddlewareState
     {
-        
+
         public ExecutionState(StateArguments args) : base(args)
         {
-            
+
         }
         public override void Main()
         {
 
             var invocationArguments = this._arguments.GetInvocationArguments();
-            var invocation = InvocationProvider.CreateInvocation(invocationArguments,_serviceProvider);
+            var invocation = InvocationProvider.CreateInvocation(invocationArguments, _serviceProvider, _errorStack, _resultStack);
 
             try
             {
@@ -32,22 +32,16 @@ namespace CQRService.Middleware.States.Concrete
                 if (exception.GetType() == typeof(ExitFromProcess))
                 {
                     var exit = (ExitFromProcess)exception;
-                    error = exit.Error;
+                    _errorStack.AddErrorResult(exit.Error);
+                    invocation.Results.IsOperationSuccess = false;
                 }
                 else
                 {
-                    error = _exceptionHandler.CreateErrorResult("Throwed Exception", e, "ExecutionState");
-
+                    _errorStack.AddErrorResult("Throwed Exception", e, "ExecutionState");
+                    invocation.Results.IsOperationSuccess = false;
                 }
-                invocation.ContinueWith(error);
             }
 
-            if (_exceptionHandler.HasError())
-            {
-                invocation.Results.Errors = _exceptionHandler.GetErrors();
-                invocation.Results.IsOperationSuccess = false;
-            }
-              
             this._arguments.SetOperationResult(invocation.Results);
             _middleware.TransitionTo(new MiddlewareResponseState(this._arguments));
         }
