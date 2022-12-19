@@ -10,7 +10,7 @@ namespace CQRService.Entities.Interceptors
 {
     public record InterceptorResultStack : IInterceptorResultStack
     {
-        public readonly InterceptorResult[] _results;
+        private InterceptorResult[] _results;
         public InterceptorResult this[int indx] { get { return _results[indx]; } }
         public int Count { get { return _results.Length; } }
 
@@ -24,6 +24,7 @@ namespace CQRService.Entities.Interceptors
             var array = _results;
             Array.Resize<InterceptorResult>(ref array, array.Length + 1);
             array[array.Length - 1] = result;
+            _results = array;
         }
         public bool TryGetFirstDataBySender(string senderName, out object data)
         {
@@ -36,6 +37,6 @@ namespace CQRService.Entities.Interceptors
             data = null;
             return false;
         }
-        
+
     }
 }

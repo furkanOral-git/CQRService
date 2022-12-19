@@ -10,7 +10,7 @@ namespace CQRService.Entities.ExceptionHandling
 {
     public class ErrorStack : IErrorResultStack
     {
-        public readonly ErrorResult[] _errors;
+        private  ErrorResult[] _errors;
         public ErrorResult this[int indx] { get { return _errors[indx]; } }
         public int Count { get { return _errors.Length; } }
         public ErrorStack()
@@ -39,6 +39,7 @@ namespace CQRService.Entities.ExceptionHandling
             var array = _errors;
             Array.Resize<ErrorResult>(ref array, array.Length + 1);
             array[array.Length - 1] = error;
+            _errors = array;
         }
         public bool TryGetErrorsBySender(string sender, out ErrorResult[] results)
         {
