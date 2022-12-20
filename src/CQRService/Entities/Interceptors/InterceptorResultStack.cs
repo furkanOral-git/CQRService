@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Security;
+using System.Security.AccessControl;
 using System.Threading.Tasks;
 using CQRService.Runtime.Interceptors;
 
@@ -37,6 +38,19 @@ namespace CQRService.Entities.Interceptors
             data = null;
             return false;
         }
+        
+        public bool TryGetAllDataBySender(string senderName, out object[] data)
+        {
+            var results = _results.Where(r => r.Sender == senderName);
+            if (results is not null)
+            {
+                data = results.Select(r => r.AspectData).ToArray();
+                return true;
+            }
+            data = null;
+            return false;
+        }
 
+       
     }
 }

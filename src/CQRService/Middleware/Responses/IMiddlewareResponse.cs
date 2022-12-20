@@ -1,11 +1,18 @@
+using CQRService.Entities.ExceptionHandling;
+using CQRService.Entities.Interceptors;
+using CQRService.Runtime;
+using CQRService.Runtime.Interceptors;
+
 namespace CQRService.Middleware.Responses
 {
     public interface IMiddlewareResponse
     {
         public bool HasData();
+        public IErrorResultStack ErrorStack { get; }
+        public IInterceptorResultStack ResultStack { get; }
 
     }
-    public interface IMiddlewareDataResponse
+    public interface IMiddlewareDataResponse : IMiddlewareResponse
     {
         public bool IsDataTypeOf<TResponse>();
     }

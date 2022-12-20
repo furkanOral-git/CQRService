@@ -1,11 +1,16 @@
 using System.Net;
-
+using CQRService.Runtime;
+using CQRService.Runtime.Interceptors;
 
 namespace CQRService.Middleware.Responses.SuccessResults
 {
-    public class MiddlewareSuccessDataResponse : MiddlewareBaseResponse, IMiddlewareResponse, IMiddlewareDataResponse
+    public class MiddlewareSuccessDataResponse : MiddlewareBaseResponse, IMiddlewareDataResponse
     {
         public object Data { get; init; }
+
+        public IErrorResultStack ErrorStack => this.ErrorStack;
+
+        public IInterceptorResultStack ResultStack => this.ResultStack;
 
         public MiddlewareSuccessDataResponse(object data, string title) : base(true, title, HttpStatusCode.OK)
         {
