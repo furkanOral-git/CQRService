@@ -33,14 +33,14 @@ namespace CQRService.MiddlewareContainer
         {
             VerifyTypeForIsNotAbstract(typeof(TImplementation));
             Guid id = Guid.NewGuid();
-            bool IsNew;
+            
             var serviceRegister = _factory.GetServiceRegister
             (
                 id,
                 null,
                 typeof(TImplementation),
                 RegistrationType.Singleton,
-                out IsNew
+                out bool IsNew
             );
             if (!IsNew)
             {
@@ -55,14 +55,14 @@ namespace CQRService.MiddlewareContainer
         {
             VerifyTypeForIsNotAbstract(typeof(TImplementation));
             Guid id = Guid.NewGuid();
-            bool IsNew;
+            
             var serviceRegister = _factory.GetServiceRegister
             (
                 id,
                 null,
                 typeof(TImplementation),
                 RegistrationType.Transient,
-                out IsNew
+                out bool IsNew
             );
             if (!IsNew)
             {
@@ -77,14 +77,14 @@ namespace CQRService.MiddlewareContainer
         {
             VerifyTypeForIsNotAbstract(typeof(TImplementation));
             Guid id = Guid.NewGuid();
-            bool IsNew;
+            
             var serviceRegister = _factory.GetServiceRegister
             (
                 id,
                 typeof(TSource),
                 typeof(TImplementation),
                 RegistrationType.Singleton,
-                out IsNew
+                out bool IsNew
             );
             if (!IsNew)
             {
@@ -99,14 +99,14 @@ namespace CQRService.MiddlewareContainer
         {
             VerifyTypeForIsNotAbstract(typeof(TImplementation));
             Guid id = Guid.NewGuid();
-            bool IsNew;
+            
             var serviceRegister = _factory.GetServiceRegister
             (
                 id,
                 typeof(TSource),
                 typeof(TImplementation),
                 RegistrationType.Transient,
-                out IsNew
+                out bool IsNew
             );
             if (!IsNew)
             {
