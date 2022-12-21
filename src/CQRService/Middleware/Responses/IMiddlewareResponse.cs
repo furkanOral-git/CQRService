@@ -8,8 +8,8 @@ namespace CQRService.Middleware.Responses
     public interface IMiddlewareResponse
     {
         public bool HasData();
-        public IErrorResultStack ErrorStack { get; }
-        public IInterceptorResultStack ResultStack { get; }
+        public IErrorStackAccessor ErrorStack { get; }
+        public IResultStackAccessor ResultStack { get; }
 
     }
     public interface IMiddlewareDataResponse : IMiddlewareResponse

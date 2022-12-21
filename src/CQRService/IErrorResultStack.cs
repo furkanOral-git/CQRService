@@ -5,11 +5,11 @@ using System.Net;
 using System.Threading.Tasks;
 using CQRService.Entities.ExceptionHandling;
 
-namespace CQRService.Runtime
+namespace CQRService
 {
-    public interface IErrorResultStack
+    public interface IErrorResultStack : IErrorStackAccessor
     {
-        public bool TryGetErrorsBySender(string sender, out ErrorResult[] results);
+        
         public void AddErrorAndContinue(string title, Exception e, string sender, HttpStatusCode status = HttpStatusCode.BadRequest);
         public void AddErrorAndContinue(ErrorResult error);
         public void AddErrorAndExit(ErrorResult error);

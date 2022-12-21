@@ -8,9 +8,8 @@ namespace CQRService.Middleware.Responses.SuccessResults
     {
         public object Data { get; init; }
 
-        public IErrorResultStack ErrorStack => this.ErrorStack;
-
-        public IInterceptorResultStack ResultStack => this.ResultStack;
+        public IErrorStackAccessor ErrorStack => this.ErrorStack;
+        public IResultStackAccessor ResultStack => this.ResultStack;
 
         public MiddlewareSuccessDataResponse(object data, string title) : base(true, title, HttpStatusCode.OK)
         {

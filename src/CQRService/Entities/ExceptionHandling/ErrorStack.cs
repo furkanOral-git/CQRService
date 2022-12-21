@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using CQRService.ExceptionHandling;
-using CQRService.Runtime;
 
 namespace CQRService.Entities.ExceptionHandling
 {
