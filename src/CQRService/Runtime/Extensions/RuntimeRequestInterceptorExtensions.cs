@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Threading.Tasks;
 using CQRService.ExceptionHandling;
 using CQRService.Runtime;
@@ -17,8 +18,7 @@ namespace CQRS.Runtime.Extensions
             for (int i = 0; i < interceptors.Length; i++)
             {
                 interceptors[i].OnBefore(interception);
-                var invocation = (Invocation)interception;
-                if (invocation.ErrorStack.Count > 0) throw new ExitFromProcess("Continue With Error And Exit !");
+                if (interception.ErrorStack.Count > 0) throw new ExitFromProcess("Continue With Error And Exit !");
             }
         }
         public static void OnAfterOperations(this RequestInterceptor[] interceptors, IInterceptionAfter interception)
@@ -26,8 +26,7 @@ namespace CQRS.Runtime.Extensions
             for (int i = 0; i < interceptors.Length; i++)
             {
                 interceptors[i].OnAfter(interception);
-                var invocation = (Invocation)interception;
-                if (invocation.ErrorStack.Count > 0) throw new ExitFromProcess("Continue With Error And Exit !");
+                if (interception.ErrorStack.Count > 0) throw new ExitFromProcess("Continue With Error And Exit !");
             }
         }
         public static void OnExceptionOperations(this RequestInterceptor[] interceptors, IInterceptionException interception, Exception e)
@@ -35,8 +34,7 @@ namespace CQRS.Runtime.Extensions
             for (int i = 0; i < interceptors.Length; i++)
             {
                 interceptors[i].OnException(interception, e);
-                var invocation = (Invocation)interception;
-                if (invocation.ErrorStack.Count > 0) throw new ExitFromProcess("Continue With Error And Exit !");
+                if (interception.ErrorStack.Count > 0) throw new ExitFromProcess("Continue With Error And Exit !");
             }
         }
         public static void OnSuccessOperations(this RequestInterceptor[] interceptors, IInterceptionSuccess interception)
@@ -44,8 +42,7 @@ namespace CQRS.Runtime.Extensions
             for (int i = 0; i < interceptors.Length; i++)
             {
                 interceptors[i].OnSuccess(interception);
-                var invocation = (Invocation)interception;
-                if (invocation.ErrorStack.Count > 0) throw new ExitFromProcess("Continue With Error And Exit !");
+                if (interception.ErrorStack.Count > 0) throw new ExitFromProcess("Continue With Error And Exit !");
             }
         }
         public static void StartOperation(this RequestInterceptor[] aspects, ref Invocation invocation)
@@ -71,6 +68,7 @@ namespace CQRS.Runtime.Extensions
 
 
         }
+        
 
 
 
