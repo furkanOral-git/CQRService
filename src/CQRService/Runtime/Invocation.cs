@@ -16,8 +16,8 @@ namespace CQRService.Runtime
         public MethodInfo HandleMethod { get; init; }
         public object HandlerObject { get; init; }
         public OperationResult Results { get; init; }
-        public IInterceptorResultStack ResultStack { get; init; }
-        public IErrorResultStack ErrorStack { get; init; }
+        public InterceptorResultStack ResultStack { get; init; }
+        public ErrorStack ErrorStack { get; init; }
         private IRuntimeServiceProvider _serviceProvider;
 
         public Invocation(object request, object handler, MethodInfo handleMethod, IRuntimeServiceProvider serviceProvider, ErrorStack erStack, InterceptorResultStack reStack)

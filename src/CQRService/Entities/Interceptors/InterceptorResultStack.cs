@@ -10,27 +10,27 @@ using CQRService.Runtime.Interceptors;
 
 namespace CQRService.Entities.Interceptors
 {
-    public record InterceptorResultStack : IInterceptorResultStack
+    public record InterceptorResultStack : IInterceptorResultStack, IResultStackAccessor
     {
-        private InterceptorResult[] _results;
-        public InterceptorResult this[int indx] { get { return _results[indx]; } }
-        public int Count { get { return _results.Length; } }
+        public int Count { get { return Results.Length; } }
+        public InterceptorResult[] Results { get; private set; }
+        public InterceptorResult this[int indx] { get { return Results[indx]; } }
 
         public InterceptorResultStack()
         {
-            _results = Array.Empty<InterceptorResult>();
+            Results = Array.Empty<InterceptorResult>();
         }
         public void AddInterceptorResult(string sender, object data)
         {
             InterceptorResult result = new InterceptorResult(sender, data);
-            var array = _results;
+            var array = Results;
             Array.Resize<InterceptorResult>(ref array, array.Length + 1);
             array[array.Length - 1] = result;
-            _results = array;
+            Results = array;
         }
         public bool TryGetFirstDataBySender(string senderName, out object data)
         {
-            var result = _results.FirstOrDefault(r => r.Sender == senderName);
+            var result = Results.FirstOrDefault(r => r.Sender == senderName);
             if (result != default)
             {
                 data = result.AspectData;
@@ -39,10 +39,10 @@ namespace CQRService.Entities.Interceptors
             data = null;
             return false;
         }
-        
+
         public bool TryGetAllDataBySender(string senderName, out object[] data)
         {
-            var results = _results.Where(r => r.Sender == senderName);
+            var results = Results.Where(r => r.Sender == senderName);
             if (results is not null)
             {
                 data = results.Select(r => r.AspectData).ToArray();
@@ -52,6 +52,6 @@ namespace CQRService.Entities.Interceptors
             return false;
         }
 
-       
+
     }
 }

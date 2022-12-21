@@ -6,7 +6,7 @@ using CQRService.Middleware.Responses;
 
 namespace CQRService
 {
-    public interface IInterceptorResultStack : IResultStackAccessor
+    public interface IInterceptorResultStack 
     {
         public void AddInterceptorResult(string sender, object data);
         

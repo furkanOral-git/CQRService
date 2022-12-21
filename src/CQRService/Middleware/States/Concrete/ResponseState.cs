@@ -44,19 +44,19 @@ namespace CQRService.Middleware.States.Concrete
         private MiddlewareErrorResponse CreateErrorResponse(ErrorStack results)
         {
             var response = new MiddlewareErrorResponse("Failed Request", HttpStatusCode.BadRequest);
-            response.Errors = results;
+            response.ErrorStack = results;
             return response;
         }
-        private MiddlewareSuccessResponse CreateSuccessResponse(InterceptorResultStack result)
+        private MiddlewareSuccessResponse CreateSuccessResponse(InterceptorResultStack results)
         {
             var response = new MiddlewareSuccessResponse("Succeed Request");
-            response.AspectResults = result;
+            response.ResultStack = results;
             return response;
         }
         private MiddlewareSuccessDataResponse CreateSuccessDataResponse(object data, InterceptorResultStack results)
         {
             var response = new MiddlewareSuccessDataResponse(data, "Succeed Request");
-            response.AspectResults = results;
+            response.ResultStack = results;
             return response;
         }
     }

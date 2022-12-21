@@ -7,14 +7,14 @@ using CQRService.ExceptionHandling;
 
 namespace CQRService.Entities.ExceptionHandling
 {
-    public class ErrorStack : IErrorResultStack
+    public class ErrorStack : IErrorResultStack, IErrorStackAccessor
     {
-        private  ErrorResult[] _errors;
-        public ErrorResult this[int indx] { get { return _errors[indx]; } }
-        public int Count { get { return _errors.Length; } }
+        public int Count { get { return Errors.Length; } }
+        public ErrorResult[] Errors { get; private set; }
+        public ErrorResult this[int indx] { get { return Errors[indx]; } }
         public ErrorStack()
         {
-            _errors = Array.Empty<ErrorResult>();
+            Errors = Array.Empty<ErrorResult>();
         }
         public void AddErrorResult(string title, Exception e, string sender, HttpStatusCode status = HttpStatusCode.BadRequest)
         {
@@ -35,14 +35,14 @@ namespace CQRService.Entities.ExceptionHandling
         }
         public void AddErrorResult(ErrorResult error)
         {
-            var array = _errors;
+            var array = Errors;
             Array.Resize<ErrorResult>(ref array, array.Length + 1);
             array[array.Length - 1] = error;
-            _errors = array;
+            Errors = array;
         }
         public bool TryGetErrorsBySender(string sender, out ErrorResult[] results)
         {
-            var errors = _errors.Where(e => e.Sender == sender).ToArray();
+            var errors = Errors.Where(e => e.Sender == sender).ToArray();
             if (errors != default)
             {
                 results = errors;
@@ -53,7 +53,7 @@ namespace CQRService.Entities.ExceptionHandling
         }
         public ErrorResult[] GetErrors()
         {
-            return _errors;
+            return Errors;
         }
 
         public void AddErrorAndContinue(string title, Exception e, string sender, HttpStatusCode status = HttpStatusCode.BadRequest)
@@ -79,6 +79,6 @@ namespace CQRService.Entities.ExceptionHandling
             throw new ExitFromProcess(error);
         }
 
-        
+
     }
 }

@@ -10,8 +10,8 @@ namespace CQRService.Runtime.Interceptors
 {
     public interface IInterception
     {
-        public IInterceptorResultStack ResultStack { get; init; }
-        public IErrorResultStack ErrorStack { get; init; }
+        public InterceptorResultStack ResultStack { get; init; }
+        public ErrorStack ErrorStack { get; init; }
         public TRequest GetRequestForControl<TRequest>()
         where TRequest : class, IRequestQueryBase, new();
         public TSource GetService<TSource>() where TSource : class;

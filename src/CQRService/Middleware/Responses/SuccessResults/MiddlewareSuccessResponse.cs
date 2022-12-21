@@ -6,7 +6,7 @@ using CQRService.Runtime.Interceptors;
 
 namespace CQRService.Middleware.Responses.SuccessResults
 {
-    public class MiddlewareSuccessResponse : MiddlewareBaseResponse, IMiddlewareResponse
+    public class MiddlewareSuccessResponse : MiddlewareBaseResponse, IMiddlewareSuccessResponse
     {
 
 
@@ -15,17 +15,11 @@ namespace CQRService.Middleware.Responses.SuccessResults
 
         }
 
-        public IErrorStackAccessor ErrorStack => this.ErrorStack;
-        public IResultStackAccessor ResultStack => this.ResultStack;
-
-        public bool HasData()
+        public override bool HasData()
         {
             return false;
         }
 
-        bool IMiddlewareResponse.HasData()
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }

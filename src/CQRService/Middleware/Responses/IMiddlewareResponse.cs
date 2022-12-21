@@ -12,9 +12,17 @@ namespace CQRService.Middleware.Responses
         public IResultStackAccessor ResultStack { get; }
 
     }
-    public interface IMiddlewareDataResponse : IMiddlewareResponse
+    public interface IMiddlewareSuccessDataResponse : IMiddlewareResponse
     {
         public bool IsDataTypeOf<TResponse>();
+    }
+    public interface IMiddlewareSuccessResponse : IMiddlewareResponse
+    {
+
+    }
+    public interface IMiddlewareErrorResponse : IMiddlewareResponse
+    {
+
     }
 
 }

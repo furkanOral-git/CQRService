@@ -6,13 +6,16 @@ using CQRService.Runtime.Interceptors;
 
 namespace CQRService.Middleware.Responses
 {
-    public abstract class MiddlewareBaseResponse 
+    public abstract class MiddlewareBaseResponse : IMiddlewareResponse
     {
         public string Title { get; init; }
         public bool IsSuccess { get; init; }
         public HttpStatusCode Status { get; init; }
-        public ErrorStack Errors { get; internal set; }
-        public InterceptorResultStack AspectResults { get; internal set; }
+        public ErrorStack ErrorStack { get; internal set; }
+        public InterceptorResultStack ResultStack { get; internal set; }
+
+        IErrorStackAccessor IMiddlewareResponse.ErrorStack => ErrorStack;
+        IResultStackAccessor IMiddlewareResponse.ResultStack => ResultStack;
 
         public MiddlewareBaseResponse(bool isSuccess, string title, HttpStatusCode status)
         {
@@ -21,7 +24,9 @@ namespace CQRService.Middleware.Responses
             Status = status;
         }
 
-        public bool HasData()
+        public virtual bool HasData() { return default; }
+
+        bool IMiddlewareResponse.HasData()
         {
             throw new NotImplementedException();
         }

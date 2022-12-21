@@ -1,6 +1,6 @@
-using System.Linq.Expressions;
 using System.Text.Json;
 using CQRService.Entities.BaseInterfaces;
+using CQRService.JsonProviderService;
 using CQRService.Middleware;
 using CQRService.Middleware.Responses;
 using CQRService.Middleware.Responses.SuccessResults;
@@ -10,7 +10,7 @@ using CQRService.Runtime;
 
 namespace CQRService.RequestSenderService
 {
-    public static class RequestSenderService
+    public static class RequestSenderService 
     {
         public static IMiddlewareResponse Send<TEntity>(this IRequestQueryBase<TEntity> request)
         where TEntity : class, new()
@@ -27,13 +27,6 @@ namespace CQRService.RequestSenderService
 
             _middleware.TransitionTo(new İnitialState(arg));
             return _middleware.GetMiddlewareResponse();
-        }
-        public static JsonElement GetAsJSON(this IMiddlewareResponse response)
-        {
-            var jsonElement = JsonSerializer.SerializeToElement(response, typeof(MiddlewareBaseResponse)
-            , new JsonSerializerOptions() { WriteIndented = true }
-            );
-            return jsonElement;
         }
         public static bool TryGetData<TResponse>(this IMiddlewareResponse response, out TResponse? data)
         {

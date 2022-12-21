@@ -7,9 +7,8 @@ using CQRService.Entities.ExceptionHandling;
 
 namespace CQRService
 {
-    public interface IErrorResultStack : IErrorStackAccessor
+    public interface IErrorResultStack 
     {
-        
         public void AddErrorAndContinue(string title, Exception e, string sender, HttpStatusCode status = HttpStatusCode.BadRequest);
         public void AddErrorAndContinue(ErrorResult error);
         public void AddErrorAndExit(ErrorResult error);
