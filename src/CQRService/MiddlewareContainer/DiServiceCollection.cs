@@ -13,7 +13,7 @@ namespace CQRService.MiddlewareContainer
     public class DiServiceCollection : IDiServiceCollection
     {
         private IServiceRegisterFactory _factory;
-        private static DiServiceCollection _instance;
+        private static DiServiceCollection? _instance;
 
 
         private DiServiceCollection()

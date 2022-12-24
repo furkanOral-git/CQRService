@@ -13,7 +13,7 @@ namespace CQRService.ModuleRegistrationService
         public static IDiServiceCollection AddModule<TModule>(this IDiServiceCollection services)
         where TModule : InjectionModuleBase, new()
         {
-            var module = (TModule)Activator.CreateInstance(typeof(TModule));
+            var module = Activator.CreateInstance(typeof(TModule)) as TModule;
             if (module is not null) module.LoadServices(services);
             return services;
         }

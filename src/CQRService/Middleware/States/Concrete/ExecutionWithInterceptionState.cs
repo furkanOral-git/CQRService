@@ -23,7 +23,7 @@ namespace CQRService.Middleware.States.Concrete
             {
                 aspects.StartOperation(ref invocation);
             }
-            catch (ExitFromProcess e)
+            catch (ExitFromProcess)
             {
                 invocation.Results.IsOperationSuccess = false;
             }

@@ -11,16 +11,14 @@ namespace CQRService.Middleware.States
     {
         protected static RequestMiddleware _middleware;
         protected StateArguments _arguments;
-        protected static ErrorStack _errorStack;
+        protected ErrorStack _errorStack;
         protected InterceptorResultStack _resultStack;
         protected static IRuntimeServiceProvider _serviceProvider;
 
 
         public MiddlewareState(StateArguments arguments)
         {
-
             _arguments = arguments;
-
         }
         static MiddlewareState()
         {

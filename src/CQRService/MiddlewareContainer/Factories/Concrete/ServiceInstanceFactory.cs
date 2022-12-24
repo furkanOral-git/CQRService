@@ -9,7 +9,7 @@ namespace CQRService.MiddlewareContainer.Factories.Concrete
 {
     internal class ServiceInstanceFactory : BaseFactory, IServiceInstanceFactory
     {
-        private static IServiceInstanceFactory _instance;
+        private static IServiceInstanceFactory? _instance;
         private ServiceInstanceFactory()
         {
 

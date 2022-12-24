@@ -14,6 +14,6 @@ namespace CQRService.Runtime.Interceptors
         public ErrorStack ErrorStack { get; init; }
         public TRequest GetRequestForControl<TRequest>()
         where TRequest : class, IRequestQueryBase, new();
-        public TSource GetService<TSource>() where TSource : class;
+        public TSource? GetService<TSource>() where TSource : class;
     }
 }

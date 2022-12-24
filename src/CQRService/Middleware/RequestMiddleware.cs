@@ -1,3 +1,4 @@
+using CQRService.ExceptionHandling.MiddlewareExceptions;
 using CQRService.Middleware.Responses;
 using CQRService.Middleware.States;
 
@@ -7,7 +8,7 @@ namespace CQRService.Middleware
     {
         private static RequestMiddleware? _instance;
         private MiddlewareState? _state;
-        private IMiddlewareResponse _middlewareResponse;
+        private IMiddlewareResponse? _middlewareResponse;
 
         private RequestMiddleware()
         {
@@ -29,7 +30,7 @@ namespace CQRService.Middleware
         {
             var response = this._middlewareResponse;
             ClearResponse();
-            return response;
+            return response ?? throw new MiddlewareResponseNotExistException();
         }
         internal void ClearState()
         {

@@ -9,7 +9,7 @@ namespace CQRService.MiddlewareContainer.Factories.Concrete
 {
     internal class ServiceRegisterFactory : BaseFactory, IServiceRegisterFactory
     {
-        private static IServiceRegisterFactory _instance;
+        private static IServiceRegisterFactory? _instance;
         private ServiceRegisterFactory()
         {
 
@@ -22,7 +22,7 @@ namespace CQRService.MiddlewareContainer.Factories.Concrete
             }
             return _instance;
         }
-        public ServiceRegister GetServiceRegister(Guid instanceId, Type sourceType, Type impType, RegistrationType registerType, out bool IsItNewProduction)
+        public ServiceRegister GetServiceRegister(Guid instanceId, Type? sourceType, Type impType, RegistrationType registerType, out bool IsItNewProduction)
         {
             var serviceRegister = Services.RegisteredTypes.SingleOrDefault(s => s.InstanceId == instanceId);
             if (serviceRegister is null)

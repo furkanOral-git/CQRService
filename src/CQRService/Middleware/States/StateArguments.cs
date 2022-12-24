@@ -1,5 +1,6 @@
 
 using CQRService.Entities.Middleware;
+using CQRService.ExceptionHandling.MiddlewareExceptions;
 using CQRService.Runtime;
 
 namespace CQRService.Middleware.States
@@ -7,7 +8,7 @@ namespace CQRService.Middleware.States
     internal class StateArguments
     {
         private InvocationArguments _invocationArguments;
-        private OperationResult _result;
+        private OperationResult? _result;
 
         public StateArguments(InvocationArguments invocationArguments)
         {
@@ -20,7 +21,7 @@ namespace CQRService.Middleware.States
         }
         public OperationResult GetOperationResult()
         {
-            return _result;
+            return _result ?? throw new NotInitiliazedOperationResultException();
         }
         public InvocationArguments GetInvocationArguments()
         {

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Threading.Tasks;
 using CQRService.ExceptionHandling.MiddlewareContainerExceptions;
 using CQRService.MiddlewareContainer.Entities;
@@ -12,7 +14,7 @@ namespace CQRService.MiddlewareContainer
 {
     public sealed class ContainerServiceProvider : IRuntimeServiceProvider, IDiServiceProvider
     {
-        private static ContainerServiceProvider _instance;
+        private static ContainerServiceProvider? _instance;
         private MiddlewareServiceContainer _container;
         private IServiceInstanceFactory _factory;
 
@@ -33,14 +35,14 @@ namespace CQRService.MiddlewareContainer
             {
                 throw new NotRegisteredTypeException(MiddlewareContainerExceptionMessages.NotRegisteredTypeExceptionMessage);
             }
-            var args = GetArgs(serviceRegister.ImplementationType,GetService);
+            var args = GetArgs(serviceRegister.ImplementationType, GetService);
             var serviceInstance = _factory.GetServiceInstance(serviceRegister.InstanceId);
-            return GetInstanceByRegisterType(serviceRegister, serviceInstance, args);
-            
+            return GetInstanceByRegisterType(serviceRegister, serviceInstance, args) ?? throw new InstanceCreationException(MiddlewareContainerExceptionMessages.InstanceCreationExceptionMessage);
+
         }
-        private object GetInstanceByRegisterType(ServiceRegister serviceRegister, ServiceInstance serviceInstance, object[]? args)
+        private object? GetInstanceByRegisterType(ServiceRegister serviceRegister, ServiceInstance serviceInstance, object[]? args)
         {
-            object instance = default;
+            object? instance = default;
             if (serviceInstance.Instance is null)
             {
                 instance = Activator.CreateInstance(serviceRegister.ImplementationType, args ?? null);
@@ -91,9 +93,9 @@ namespace CQRService.MiddlewareContainer
                 var instance = Activator.CreateInstance(serviceRegister.ImplementationType, args ?? null);
                 serviceInstance.UpdateInstance(instance);
             }
-            return serviceInstance.Instance;
+            return serviceInstance.Instance ?? throw new InstanceCreationException(MiddlewareContainerExceptionMessages.InstanceCreationExceptionMessage);
         }
-        object IRuntimeServiceProvider.GetServiceOnRuntime(Type sourceType)
+        object? IRuntimeServiceProvider.GetServiceOnRuntime(Type sourceType)
         {
             return GetServiceOnRuntimeBase(sourceType);
         }

@@ -21,7 +21,7 @@ namespace CQRService.Middleware.States.Concrete
         {
             var results = this._arguments.GetOperationResult();
 
-            IMiddlewareResponse response = null;
+            IMiddlewareResponse? response = null;
             if (results.IsOperationSuccess)
             {
                 if (results.Response is not null)

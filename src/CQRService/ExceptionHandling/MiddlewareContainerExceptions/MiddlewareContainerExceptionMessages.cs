@@ -9,5 +9,6 @@ namespace CQRService.ExceptionHandling.MiddlewareContainerExceptions
     {
         public static string NotRegisteredTypeExceptionMessage = "";
         public static string AbstractImplementationTypeMessage = "";
+        public static string InstanceCreationExceptionMessage = "";
     }
 }
