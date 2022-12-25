@@ -29,11 +29,10 @@ namespace CQRService.MiddlewareContainer
             return _instance;
         }
         public void AddSingleton<TImplementation>()
-        where TImplementation : class
+        where TImplementation : class, new()
         {
-            VerifyTypeForIsNotAbstract(typeof(TImplementation));
             Guid id = Guid.NewGuid();
-            
+
             var serviceRegister = _factory.GetServiceRegister
             (
                 id,
@@ -49,13 +48,11 @@ namespace CQRService.MiddlewareContainer
 
 
         }
-
         public void AddTransient<TImplementation>()
-        where TImplementation : class
+        where TImplementation : class, new()
         {
-            VerifyTypeForIsNotAbstract(typeof(TImplementation));
             Guid id = Guid.NewGuid();
-            
+
             var serviceRegister = _factory.GetServiceRegister
             (
                 id,
@@ -70,14 +67,13 @@ namespace CQRService.MiddlewareContainer
             }
 
         }
-
         public void AddSingleton<TSource, TImplementation>()
         where TSource : class
         where TImplementation : class, TSource
         {
             VerifyTypeForIsNotAbstract(typeof(TImplementation));
             Guid id = Guid.NewGuid();
-            
+
             var serviceRegister = _factory.GetServiceRegister
             (
                 id,
@@ -92,14 +88,13 @@ namespace CQRService.MiddlewareContainer
             }
 
         }
-
         public void AddTransient<TSource, TImplementation>()
         where TSource : class
         where TImplementation : class, TSource
         {
             VerifyTypeForIsNotAbstract(typeof(TImplementation));
             Guid id = Guid.NewGuid();
-            
+
             var serviceRegister = _factory.GetServiceRegister
             (
                 id,
@@ -122,7 +117,42 @@ namespace CQRService.MiddlewareContainer
                 (MiddlewareContainerExceptionMessages.AbstractImplementationTypeMessage + $"AbstractImplementationType : {type.Name}");
             }
         }
+        public void AddScoped<TSource, TImplementation>()
+        where TSource : class
+        where TImplementation : class, TSource
+        {
+            VerifyTypeForIsNotAbstract(typeof(TImplementation));
+            Guid id = Guid.NewGuid();
 
+            var serviceRegister = _factory.GetServiceRegister
+            (
+                id,
+                typeof(TSource),
+                typeof(TImplementation),
+                RegistrationType.Scoped,
+                out bool IsNew
+            );
+            if (!IsNew)
+            {
+                _factory.UpdateServiceRegister(serviceRegister);
+            }
+        }
+        public void AddScoped<TImplementation>() where TImplementation : class, new()
+        {
+            Guid id = Guid.NewGuid();
 
+            var serviceRegister = _factory.GetServiceRegister
+            (
+                id,
+                null,
+                typeof(TImplementation),
+                RegistrationType.Scoped,
+                out bool IsNew
+            );
+            if (!IsNew)
+            {
+                _factory.UpdateServiceRegister(serviceRegister);
+            }
+        }
     }
 }

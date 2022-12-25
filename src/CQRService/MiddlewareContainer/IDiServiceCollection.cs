@@ -13,32 +13,20 @@ namespace CQRService.MiddlewareContainer
         where TImplementation : class, TSource;
 
         public void AddSingleton<TImplementation>()
-        where TImplementation : class;
+        where TImplementation : class, new();
 
         public void AddTransient<TSource, TImplementation>()
         where TSource : class
         where TImplementation : class, TSource;
 
         public void AddTransient<TImplementation>()
-        where TImplementation : class;
+        where TImplementation : class, new();
 
-        // internal void AddRequiredTransient<TSource, TImplementation>()
-        // where TSource : class
-        // where TImplementation : class, TSource;
-        // internal void AddRequiredTransient<TImplementation>()
-        // where TImplementation : class;
-        // internal void AddRequiredSingleton<TSource, TImplementation>()
-        // where TSource : class
-        // where TImplementation : class, TSource;
-        // internal void AddRequiredSingleton<TImplementation>()
-        // where TImplementation : class;
+        public void AddScoped<TSource, TImplementation>()
+        where TSource : class
+        where TImplementation : class, TSource;
 
-
-        // public void AddScoped<TSource, TImplementation>()
-        // where TSource : class
-        // where TImplementation : class, TSource;
-
-        // public void AddScoped<TImplementation>()
-        // where TImplementation : class;
+        public void AddScoped<TImplementation>()
+        where TImplementation : class, new();
     }
 }
