@@ -58,7 +58,9 @@ namespace CQRService.MiddlewareContainer
                     instance = Activator.CreateInstance(serviceRegister.ImplementationType, args ?? null);
                     serviceInstance.UpdateInstance(instance);
                     break;
-
+                case RegistrationType.Scoped:
+                    
+                    break;
             }
             if (instance is null)
             {

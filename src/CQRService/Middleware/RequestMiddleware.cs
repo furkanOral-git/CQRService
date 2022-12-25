@@ -1,6 +1,7 @@
 using CQRService.ExceptionHandling.MiddlewareExceptions;
 using CQRService.Middleware.Responses;
 using CQRService.Middleware.States;
+using CQRService.MiddlewareContainer;
 
 namespace CQRService.Middleware
 {
@@ -9,10 +10,11 @@ namespace CQRService.Middleware
         private static RequestMiddleware? _instance;
         private MiddlewareState? _state;
         private IMiddlewareResponse? _middlewareResponse;
-
+        public IDiServiceProvider Provider { get; init; }
         private RequestMiddleware()
         {
             _middlewareResponse = default;
+            Provider = ContainerServiceProvider.GetProvider();
         }
         public static RequestMiddleware Get()
         {
@@ -22,6 +24,7 @@ namespace CQRService.Middleware
             }
             return _instance;
         }
+        
         internal void SetMiddlewareResponse(IMiddlewareResponse response)
         {
             this._middlewareResponse = response;

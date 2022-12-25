@@ -23,8 +23,7 @@ namespace CQRService.Middleware.States
         static MiddlewareState()
         {
             _middleware = RequestMiddleware.Get();
-            _serviceProvider = ContainerServiceProvider.GetProvider();
-            
+            _serviceProvider = (IRuntimeServiceProvider)_middleware.Provider;
         }
 
         public abstract void Main();
