@@ -36,9 +36,16 @@ namespace CQRService.MiddlewareContainer
                 throw new NotRegisteredTypeException(MiddlewareContainerExceptionMessages.NotRegisteredTypeExceptionMessage);
             }
             var args = GetArgs(serviceRegister.ImplementationType, GetService);
-            var serviceInstance = _factory.GetServiceInstance(serviceRegister.InstanceId);
+            var serviceInstance = (serviceRegister.RegistrationType == RegistrationType.Scoped)
+            ? _factory.GetScopedServiceInstance(serviceRegister.InstanceId, GetClientId())
+            : _factory.GetServiceInstance(serviceRegister.InstanceId);
+
             return GetInstanceByRegisterType(serviceRegister, serviceInstance, args) ?? throw new InstanceCreationException(MiddlewareContainerExceptionMessages.InstanceCreationExceptionMessage);
 
+        }
+        private Guid GetClientId()
+        {
+            return default;
         }
         private object? GetInstanceByRegisterType(ServiceRegister serviceRegister, ServiceInstance serviceInstance, object[]? args)
         {
@@ -46,7 +53,7 @@ namespace CQRService.MiddlewareContainer
             if (serviceInstance.Instance is null)
             {
                 instance = Activator.CreateInstance(serviceRegister.ImplementationType, args ?? null);
-                if (instance is not null) serviceInstance.Instance = instance;
+                serviceInstance.Instance = instance;
                 return instance;
             }
             switch (serviceRegister.RegistrationType)
@@ -56,7 +63,7 @@ namespace CQRService.MiddlewareContainer
                     break;
                 case RegistrationType.Transient:
                     instance = Activator.CreateInstance(serviceRegister.ImplementationType, args ?? null);
-                    if (instance is not null) serviceInstance.Instance = instance;
+                    serviceInstance.Instance = instance;
                     break;
                 case RegistrationType.Scoped:
 
@@ -93,7 +100,7 @@ namespace CQRService.MiddlewareContainer
             {
                 var args = GetArgs(serviceRegister.ImplementationType, GetServiceOnRuntimeBase);
                 var instance = Activator.CreateInstance(serviceRegister.ImplementationType, args ?? null);
-                if (instance is not null) serviceInstance.Instance = instance;
+                serviceInstance.Instance = instance;
             }
             return serviceInstance.Instance ?? throw new InstanceCreationException(MiddlewareContainerExceptionMessages.InstanceCreationExceptionMessage);
         }

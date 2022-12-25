@@ -24,11 +24,11 @@ namespace CQRService.MiddlewareContainer.Factories.Concrete
             return _instance;
         }
 
-
-
         public ServiceInstance GetServiceInstance(Guid id)
         {
+
             var serviceInstance = Services.Instances.SingleOrDefault(i => i.InstanceId == id);
+
             if (serviceInstance is null)
             {
                 serviceInstance = new ServiceInstance
@@ -41,7 +41,6 @@ namespace CQRService.MiddlewareContainer.Factories.Concrete
         }
         public ScopedServiceInstance GetScopedServiceInstance(Guid id, Guid scopeId)
         {
-
             var serviceInstance = Services.ScopedInstances.SingleOrDefault(i => i.InstanceId == id && i.ScopeId == scopeId);
             if (serviceInstance is null)
             {

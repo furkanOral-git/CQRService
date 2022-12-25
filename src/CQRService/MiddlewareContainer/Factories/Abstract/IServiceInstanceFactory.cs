@@ -8,9 +8,8 @@ namespace CQRService.MiddlewareContainer.Factories.Abstract
 {
     internal interface IServiceInstanceFactory : IFactory<ServiceInstance>
     {
-        //Eğer container da varsa döndürür yoksa oluşturur ekler ve döndürür.
-        public ServiceInstance GetServiceInstance(Guid id );
-        
+        public ServiceInstance GetServiceInstance(Guid id);
+        public ScopedServiceInstance GetScopedServiceInstance(Guid id, Guid scopeId);
 
     }
 }
