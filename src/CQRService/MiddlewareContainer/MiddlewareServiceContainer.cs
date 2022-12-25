@@ -10,12 +10,14 @@ namespace CQRService.MiddlewareContainer
     {
         public List<ServiceRegister> RegisteredTypes { get; init; }
         public List<ServiceInstance> Instances { get; init; }
+        public List<ScopedServiceInstance> ScopedInstances { get; init; }
         private static MiddlewareServiceContainer? _instance;
-        
+
         private MiddlewareServiceContainer()
         {
             RegisteredTypes = new();
             Instances = new();
+            ScopedInstances = new();
         }
         internal static MiddlewareServiceContainer InitContainer()
         {

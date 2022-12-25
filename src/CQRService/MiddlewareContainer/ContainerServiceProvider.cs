@@ -42,11 +42,11 @@ namespace CQRService.MiddlewareContainer
         }
         private object? GetInstanceByRegisterType(ServiceRegister serviceRegister, ServiceInstance serviceInstance, object[]? args)
         {
-            object? instance = default;
+            object instance = default;
             if (serviceInstance.Instance is null)
             {
                 instance = Activator.CreateInstance(serviceRegister.ImplementationType, args ?? null);
-                serviceInstance.UpdateInstance(instance);
+                if (instance is not null) serviceInstance.Instance = instance;
                 return instance;
             }
             switch (serviceRegister.RegistrationType)
@@ -56,10 +56,10 @@ namespace CQRService.MiddlewareContainer
                     break;
                 case RegistrationType.Transient:
                     instance = Activator.CreateInstance(serviceRegister.ImplementationType, args ?? null);
-                    serviceInstance.UpdateInstance(instance);
+                    if (instance is not null) serviceInstance.Instance = instance;
                     break;
                 case RegistrationType.Scoped:
-                    
+
                     break;
             }
             if (instance is null)
@@ -93,7 +93,7 @@ namespace CQRService.MiddlewareContainer
             {
                 var args = GetArgs(serviceRegister.ImplementationType, GetServiceOnRuntimeBase);
                 var instance = Activator.CreateInstance(serviceRegister.ImplementationType, args ?? null);
-                serviceInstance.UpdateInstance(instance);
+                if (instance is not null) serviceInstance.Instance = instance;
             }
             return serviceInstance.Instance ?? throw new InstanceCreationException(MiddlewareContainerExceptionMessages.InstanceCreationExceptionMessage);
         }
