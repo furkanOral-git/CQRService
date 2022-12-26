@@ -10,21 +10,21 @@ using CQRService.MiddlewareContainer.Factories.Concrete;
 
 namespace CQRService.MiddlewareContainer
 {
-    public class DiServiceCollection : IDiServiceCollection
+    public class ContainerServiceCollection : IDiServiceCollection
     {
         private IServiceRegisterFactory _factory;
-        private static DiServiceCollection? _instance;
+        private static ContainerServiceCollection? _instance;
 
 
-        private DiServiceCollection()
+        private ContainerServiceCollection()
         {
             _factory = ServiceRegisterFactory.GetFactory();
         }
-        public static DiServiceCollection InitServiceCollection()
+        public static ContainerServiceCollection InitServiceCollection()
         {
             if (_instance is null)
             {
-                _instance = new DiServiceCollection();
+                _instance = new ContainerServiceCollection();
             }
             return _instance;
         }

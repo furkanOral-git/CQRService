@@ -10,7 +10,7 @@ namespace CQRService.MiddlewareContainer.InjectionModules
         public abstract void LoadServices(IDiServiceCollection services);
         internal static void AddCQRService()
         {
-            var services = (IDiServiceCollection)DiServiceCollection.InitServiceCollection();
+            var services = (IDiServiceCollection)ContainerServiceCollection.InitServiceCollection();
             services.AddTransient<IErrorResultStack, ErrorStack>();
             services.AddTransient<IInterceptorResultStack, InterceptorResultStack>();
         }
