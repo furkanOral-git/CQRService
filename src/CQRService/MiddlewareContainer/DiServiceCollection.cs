@@ -45,8 +45,6 @@ namespace CQRService.MiddlewareContainer
             {
                 _factory.UpdateServiceRegister(serviceRegister);
             }
-
-
         }
         public void AddTransient<TImplementation>()
         where TImplementation : class, new()
