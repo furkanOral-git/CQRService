@@ -9,6 +9,5 @@ namespace CQRService.MiddlewareContainer
     public interface IDiServiceProvider
     {
         public TService GetService<TService>() where TService : class;
-        public object GetService(Type sourceType);
     }
 }
