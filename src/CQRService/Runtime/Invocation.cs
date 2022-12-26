@@ -49,7 +49,8 @@ namespace CQRService.Runtime
 
         public TSource? GetService<TSource>() where TSource : class
         {
-            return _serviceProvider.GetServiceOnRuntime(typeof(TSource)) as TSource ?? null;
+            var handlerName = this.HandlerObject?.GetType().Name;
+            return _serviceProvider.GetServiceOnRuntime(typeof(TSource), callingTarget: handlerName) as TSource ?? null;
         }
     }
 }

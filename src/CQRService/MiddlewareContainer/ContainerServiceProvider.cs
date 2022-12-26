@@ -107,7 +107,7 @@ namespace CQRService.MiddlewareContainer
             }
             return default;
         }
-        private object? GetServiceOnRuntimeBase(Type sourceType, string callingTarget = "")
+        private object? GetServiceOnRuntimeBase(Type sourceType, string callingTarget)
         {
             var serviceRegister = _container.RegisteredTypes.SingleOrDefault(r => r.SourceType == sourceType || r.ImplementationType == sourceType);
             if (serviceRegister is null)
@@ -126,9 +126,9 @@ namespace CQRService.MiddlewareContainer
             }
             return serviceInstance.Instance;
         }
-        object? IRuntimeServiceProvider.GetServiceOnRuntime(Type sourceType)
+        object? IRuntimeServiceProvider.GetServiceOnRuntime(Type sourceType, string callingTarget = "")
         {
-            return GetServiceOnRuntimeBase(sourceType);
+            return GetServiceOnRuntimeBase(sourceType, GetTarget(callingTarget));
         }
         public TService GetService<TService>() where TService : class
         {

@@ -7,7 +7,7 @@ using CQRService.ExceptionHandling;
 
 namespace CQRService.Entities.ExceptionHandling
 {
-    public class ErrorStack : IErrorResultStack, IErrorStackAccessor
+    public record ErrorStack : IErrorResultStack, IErrorStackAccessor
     {
         public int Count { get { return Errors.Length; } }
         public ErrorResult[] Errors { get; private set; }
