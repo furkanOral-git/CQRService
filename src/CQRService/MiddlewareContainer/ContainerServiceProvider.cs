@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Reflection.Metadata.Ecma335;
+using System.Text;
 using System.Threading.Tasks;
 using CQRService.ExceptionHandling.MiddlewareContainerExceptions;
 using CQRService.MiddlewareContainer.Entities;
@@ -37,19 +39,34 @@ namespace CQRService.MiddlewareContainer
             }
             var args = GetArgs(serviceRegister.ImplementationType, GetService);
             var serviceInstance = (serviceRegister.RegistrationType == RegistrationType.Scoped)
-            ? _factory.GetScopedServiceInstance(serviceRegister.InstanceId, GetClientId())
+            ? _factory.GetScopedServiceInstance(serviceRegister.InstanceId, GetTarget())
             : _factory.GetServiceInstance(serviceRegister.InstanceId);
 
             return GetInstanceByRegisterType(serviceRegister, serviceInstance, args) ?? throw new InstanceCreationException(MiddlewareContainerExceptionMessages.InstanceCreationExceptionMessage);
 
         }
-        private Guid GetClientId()
+        private string GetTarget()
         {
-            return default;
+            StackTrace trace = new StackTrace();
+            MethodBase? method = trace.GetFrame(2)?.GetMethod();
+
+            var isGetService = method?.Name == "GetService";
+            if (isGetService) method = trace.GetFrame(3)?.GetMethod();
+
+            StringBuilder target = new();
+
+            if (method.IsConstructor)
+            {
+                target = target.Append(method?.DeclaringType?.Name);
+                return target.ToString();
+            }
+            target = target.Append(method?.DeclaringType?.Name + "_" + method?.Name);
+            return target.ToString();
+
         }
         private object? GetInstanceByRegisterType(ServiceRegister serviceRegister, ServiceInstance serviceInstance, object[]? args)
         {
-            object instance = default;
+            object? instance = default;
             if (serviceInstance.Instance is null)
             {
                 instance = Activator.CreateInstance(serviceRegister.ImplementationType, args ?? null);

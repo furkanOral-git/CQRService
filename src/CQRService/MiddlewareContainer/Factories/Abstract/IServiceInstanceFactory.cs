@@ -9,7 +9,7 @@ namespace CQRService.MiddlewareContainer.Factories.Abstract
     internal interface IServiceInstanceFactory : IFactory<ServiceInstance>
     {
         public ServiceInstance GetServiceInstance(Guid id);
-        public ScopedServiceInstance GetScopedServiceInstance(Guid id, Guid scopeId);
+        public ScopedServiceInstance GetScopedServiceInstance(Guid id, string target);
 
     }
 }
