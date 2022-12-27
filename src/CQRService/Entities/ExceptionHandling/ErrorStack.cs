@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using System.Reflection.Metadata.Ecma335;
 using System.Threading.Tasks;
 using CQRService.ExceptionHandling;
 
@@ -16,12 +18,12 @@ namespace CQRService.Entities.ExceptionHandling
         {
             Errors = Array.Empty<ErrorResult>();
         }
-        public void AddErrorResult(string title, Exception e, string sender, HttpStatusCode status = HttpStatusCode.BadRequest)
+        public void AddErrorResult(Exception e, string title, string sender, HttpStatusCode status = HttpStatusCode.BadRequest)
         {
-            var error = CreateError(title, e, sender, status);
+            var error = CreateError(e, title, sender, status);
             AddErrorResult(error);
         }
-        public ErrorResult CreateError(string title, Exception e, string sender, HttpStatusCode status = HttpStatusCode.BadRequest)
+        public ErrorResult CreateError(Exception e, string title, string sender, HttpStatusCode status = HttpStatusCode.BadRequest)
         {
             ErrorResult error = new ErrorResult
             (
@@ -40,45 +42,33 @@ namespace CQRService.Entities.ExceptionHandling
             array[array.Length - 1] = error;
             Errors = array;
         }
-        public bool TryGetErrorsBySender(string sender, out ErrorResult[] results)
+        public bool TryGetErrorByType<TException>(out ErrorResult result) where TException : Exception
         {
-            var errors = Errors.Where(e => e.Sender == sender).ToArray();
-            if (errors != default)
-            {
-                results = errors;
-                return true;
-            }
-            results = default;
-            return false;
+            result = Errors.SingleOrDefault(e => e.ExceptionType == nameof(TException));
+            return (result != default) ? false : true;
         }
-        public ErrorResult[] GetErrors()
+        public bool TryGetErrorsBySender<TSender>(out ErrorResult[] results)
         {
-            return Errors;
+            results = Errors.Where(e => e.Sender == nameof(TSender)).ToArray();
+            return (results is null) ? false : true;
         }
+        public void AddErrorAndContinue(Exception e, HttpStatusCode status = HttpStatusCode.BadRequest)
+        {
+            AddErrorResult(e, "An Error Occured And Continue", GetSender(), status);
+        }
+        private string GetSender()
+        {
+            StackTrace st = new StackTrace();
+            var senderMethod = st.GetFrame(2).GetMethod();
+            return string.Format("{0}.{1}()", senderMethod?.DeclaringType?.Name, senderMethod?.Name);
+        }
+        public void AddErrorAndExit(Exception e, HttpStatusCode status = HttpStatusCode.BadRequest)
+        {
 
-        public void AddErrorAndContinue(string title, Exception e, string sender, HttpStatusCode status = HttpStatusCode.BadRequest)
-        {
-            AddErrorResult(title, e, sender, status);
-        }
-
-        public void AddErrorAndExit(string title, Exception e, string sender, HttpStatusCode status = HttpStatusCode.BadRequest)
-        {
-            var error = CreateError(title, e, sender, status);
+            var error = CreateError(e, "Exit With Error", GetSender(), status);
             AddErrorResult(error);
             throw new ExitFromProcess(error);
         }
-
-        public void AddErrorAndContinue(ErrorResult error)
-        {
-            AddErrorResult(error);
-        }
-
-        public void AddErrorAndExit(ErrorResult error)
-        {
-            AddErrorResult(error);
-            throw new ExitFromProcess(error);
-        }
-
-
+        
     }
 }

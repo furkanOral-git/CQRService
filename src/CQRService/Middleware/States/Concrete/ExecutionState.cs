@@ -15,7 +15,7 @@ namespace CQRService.Middleware.States.Concrete
         }
         public override void Main()
         {
-            
+
             var invocationArguments = this._arguments.GetInvocationArguments();
             var invocation = InvocationProvider.CreateInvocation(invocationArguments, _serviceProvider, _errorStack, _resultStack);
 
@@ -27,14 +27,14 @@ namespace CQRService.Middleware.States.Concrete
             catch (TargetInvocationException e)
             {
                 var exception = e.InnerException;
-                    
+
                 if (exception?.GetType() == typeof(ExitFromProcess))
                 {
                     invocation.Results.IsOperationSuccess = false;
                 }
                 else
                 {
-                    _errorStack.AddErrorResult("Throwed Exception", e, "ExecutionState");
+                    _errorStack.AddErrorResult(e, "Throwed Exception", nameof(ExecutionState));
                     invocation.Results.IsOperationSuccess = false;
                 }
             }

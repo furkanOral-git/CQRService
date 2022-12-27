@@ -29,7 +29,7 @@ namespace CQRService.Middleware.States.Concrete
             }
             catch (Exception e)
             {
-                _errorStack.AddErrorResult("Throwed Exception", e, nameof(ExecutionWithInterceptionState));
+                _errorStack.AddErrorResult(e, "Throwed Exception", nameof(ExecutionWithInterceptionState));
                 invocation.Results.IsOperationSuccess = false;
             }
 

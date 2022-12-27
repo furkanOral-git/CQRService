@@ -8,6 +8,8 @@ namespace CQRService
 {
     public interface IErrorStackAccessor
     {
-        public bool TryGetErrorsBySender(string sender, out ErrorResult[] results);
+        public bool TryGetErrorsBySender<TSender>(out ErrorResult[] results);
+        public bool TryGetErrorByType<TException>(out ErrorResult result)
+        where TException : Exception;
     }
 }
