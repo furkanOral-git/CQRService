@@ -28,19 +28,19 @@ namespace CQRService.Entities.Interceptors
             array[array.Length - 1] = result;
             Results = array;
         }
-        public bool TryGetFirstDataBySender(string senderName, out object? data)
+        public bool TryGetFirstDataBySender(string senderName, out object data)
         {
             var result = Results.FirstOrDefault(r => r.Sender == senderName);
             if (result != default)
             {
-                data = result.AspectData ?? null;
+                data = result.AspectData;
                 return (data is null) ? false : true;
             }
-            data = null;
+            data = default;
             return false;
         }
 
-        public bool TryGetAllDataBySender(string senderName, out object?[]? data)
+        public bool TryGetAllDataBySender(string senderName, out object[] data)
         {
             var results = Results.Where(r => r.Sender == senderName);
             if (results is not null)
