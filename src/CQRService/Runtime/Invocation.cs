@@ -7,6 +7,7 @@ using CQRService.Entities.ExceptionHandling;
 using CQRService.Entities.Interceptors;
 using CQRService.Entities.Middleware;
 using CQRService.ExceptionHandling.RuntimeExceptions;
+using CQRService.MiddlewareContainer;
 using CQRService.Runtime.Interceptors;
 
 namespace CQRService.Runtime
@@ -19,9 +20,9 @@ namespace CQRService.Runtime
         public OperationResult Results { get; init; }
         public InterceptorResultStack ResultStack { get; init; }
         public ErrorStack ErrorStack { get; init; }
-        private IRuntimeServiceProvider _serviceProvider;
+        private IDiServiceProvider _serviceProvider;
 
-        public Invocation(object? request, object? handler, MethodInfo? handleMethod, IRuntimeServiceProvider serviceProvider, ErrorStack erStack, InterceptorResultStack reStack)
+        public Invocation(object? request, object? handler, MethodInfo? handleMethod, IDiServiceProvider serviceProvider, ErrorStack erStack, InterceptorResultStack reStack)
         {
             Request = request;
             HandlerObject = handler;
@@ -49,7 +50,7 @@ namespace CQRService.Runtime
 
         public TSource? GetService<TSource>() where TSource : class
         {
-            return _serviceProvider.GetServiceOnRuntime(typeof(TSource)) as TSource ?? null;
+            return _serviceProvider.GetService<TSource>();
         }
     }
 }

@@ -14,7 +14,7 @@ using CQRService.Runtime;
 
 namespace CQRService.MiddlewareContainer
 {
-    public sealed class ContainerServiceProvider : IRuntimeServiceProvider, IDiServiceProvider
+    public sealed class ContainerServiceProvider :  IDiServiceProvider
     {
         private static ContainerServiceProvider? _instance;
         private MiddlewareServiceContainer _container;
@@ -43,7 +43,6 @@ namespace CQRService.MiddlewareContainer
             return GetInstanceByRegisterType(serviceRegister, serviceInstance, args);
 
         }
-
         private object GetInstanceByRegisterType(ServiceRegister serviceRegister, ServiceInstance serviceInstance, object[]? args)
         {
             object? instance = default;
@@ -81,7 +80,6 @@ namespace CQRService.MiddlewareContainer
             }
             return instance;
         }
-
         private object[]? GetArgs(Type impType, Func<Type, object?> selectOperation)
         {
             var parameterInfos = impType
@@ -95,32 +93,10 @@ namespace CQRService.MiddlewareContainer
             }
             return default;
         }
-        private object? GetServiceOnRuntimeBase(Type sourceType)
-        {
-            var serviceRegister = _container.RegisteredTypes.SingleOrDefault(r => r.SourceType == sourceType || r.ImplementationType == sourceType);
-            if (serviceRegister is null)
-            {
-                throw new NotRegisteredTypeException(MiddlewareContainerExceptionMessages.NotRegisteredTypeExceptionMessage);
-            }
-            var serviceInstance = _factory.GetServiceInstance(serviceRegister.InstanceId);
-
-            if (serviceInstance.Instance is null)
-            {
-                var args = GetArgs(serviceRegister.ImplementationType, GetServiceOnRuntimeBase);
-                var instance = Activator.CreateInstance(serviceRegister.ImplementationType, args ?? null);
-                serviceInstance.Instance = instance;
-            }
-            return serviceInstance.Instance;
-        }
-        object? IRuntimeServiceProvider.GetServiceOnRuntime(Type sourceType)
-        {
-            return GetServiceOnRuntimeBase(sourceType);
-        }
         public TService GetService<TService>() where TService : class
         {
             return (TService)GetService(typeof(TService));
         }
-
         void IDiServiceProvider.NewRequestId() => _container.NewRequestId();
 
     }
