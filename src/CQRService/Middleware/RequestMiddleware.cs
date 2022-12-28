@@ -24,7 +24,7 @@ namespace CQRService.Middleware
             }
             return _instance;
         }
-        
+
         internal void SetMiddlewareResponse(IMiddlewareResponse response)
         {
             this._middlewareResponse = response;

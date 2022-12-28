@@ -39,20 +39,7 @@ namespace CQRService.MiddlewareContainer.Factories.Concrete
             }
             return serviceInstance;
         }
-        public ScopedServiceInstance GetScopedServiceInstance(Guid id, string target)
-        {
-            var serviceInstance = Services.ScopedInstances.SingleOrDefault(i => i.InstanceId == id && i.Target == target);
-            if (serviceInstance is null)
-            {
-                serviceInstance = new ScopedServiceInstance
-                (
-                    id,
-                    target
-                );
-                Services.ScopedInstances.Add(serviceInstance);
-            }
-            return serviceInstance;
-        }
+       
 
     }
 }

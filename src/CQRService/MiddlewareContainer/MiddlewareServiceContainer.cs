@@ -10,20 +10,25 @@ namespace CQRService.MiddlewareContainer
     {
         public List<ServiceRegister> RegisteredTypes { get; init; }
         public List<ServiceInstance> Instances { get; init; }
-        public List<ScopedServiceInstance> ScopedInstances { get; init; }
+        public Guid RequestId { get; private set; }
+
         private static MiddlewareServiceContainer? _instance;
 
         private MiddlewareServiceContainer()
         {
             RegisteredTypes = new();
             Instances = new();
-            ScopedInstances = new();
         }
         internal static MiddlewareServiceContainer InitContainer()
         {
             if (_instance is null) _instance = new MiddlewareServiceContainer();
             return _instance;
         }
+        internal void ResetRequestId()
+        {
+            RequestId = Guid.NewGuid();
+        }
+        
 
 
     }

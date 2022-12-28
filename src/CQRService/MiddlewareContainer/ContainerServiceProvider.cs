@@ -30,41 +30,20 @@ namespace CQRService.MiddlewareContainer
             if (_instance is null) _instance = new ContainerServiceProvider();
             return _instance;
         }
-        internal object GetService(Type sourceType, string callingTarget = "")
+        internal object GetService(Type sourceType)
         {
             var serviceRegister = _container.RegisteredTypes.SingleOrDefault(r => r.SourceType == sourceType || r.ImplementationType == sourceType);
             if (serviceRegister is null)
             {
                 throw new NotRegisteredTypeException(MiddlewareContainerExceptionMessages.NotRegisteredTypeExceptionMessage);
             }
-            var args = GetArgs(serviceRegister.ImplementationType, serviceRegister.ImplementationType.Name, GetService);
-            var serviceInstance = (serviceRegister.RegistrationType == RegistrationType.Scoped)
-            ? _factory.GetScopedServiceInstance(serviceRegister.InstanceId, GetTarget(callingTarget))
-            : _factory.GetServiceInstance(serviceRegister.InstanceId);
+            var args = GetArgs(serviceRegister.ImplementationType, GetService);
+            var serviceInstance = _factory.GetServiceInstance(serviceRegister.InstanceId);
 
             return GetInstanceByRegisterType(serviceRegister, serviceInstance, args);
 
         }
-        private string GetTarget(string callingTarget = "")
-        {
-            if (callingTarget is not "") return callingTarget;
-            StackTrace trace = new StackTrace();
-            MethodBase? method = trace.GetFrame(2)?.GetMethod();
-
-            var isGetService = method?.Name == "GetService";
-            if (isGetService) method = trace.GetFrame(3)?.GetMethod();
-
-            StringBuilder target = new();
-
-            if (method.IsConstructor)
-            {
-                target = target.Append(method?.DeclaringType?.Name);
-                return target.ToString();
-            }
-            target = target.Append(method?.DeclaringType?.Name + "_" + method?.Name);
-            return target.ToString();
-
-        }
+        
         private object GetInstanceByRegisterType(ServiceRegister serviceRegister, ServiceInstance serviceInstance, object[]? args)
         {
             object? instance = default;
@@ -94,7 +73,7 @@ namespace CQRService.MiddlewareContainer
             return instance;
         }
 
-        private object[]? GetArgs(Type impType, string callingTarget, Func<Type, string, object?> selectOperation)
+        private object[]? GetArgs(Type impType, Func<Type, object?> selectOperation)
         {
             var parameterInfos = impType
             .GetConstructors()[0]
@@ -103,32 +82,30 @@ namespace CQRService.MiddlewareContainer
             var hasArgs = (parameterInfos.Length != 0) ? true : false;
             if (hasArgs)
             {
-                return parameterInfos.Select(p => p.ParameterType).Select(t => selectOperation.Invoke(t, callingTarget)).ToArray();
+                return parameterInfos.Select(p => p.ParameterType).Select(t => selectOperation.Invoke(t)).ToArray();
             }
             return default;
         }
-        private object? GetServiceOnRuntimeBase(Type sourceType, string callingTarget)
+        private object? GetServiceOnRuntimeBase(Type sourceType)
         {
             var serviceRegister = _container.RegisteredTypes.SingleOrDefault(r => r.SourceType == sourceType || r.ImplementationType == sourceType);
             if (serviceRegister is null)
             {
                 throw new NotRegisteredTypeException(MiddlewareContainerExceptionMessages.NotRegisteredTypeExceptionMessage);
             }
-            var serviceInstance = (serviceRegister.RegistrationType == RegistrationType.Scoped)
-            ? _factory.GetScopedServiceInstance(serviceRegister.InstanceId, callingTarget)
-            : _factory.GetServiceInstance(serviceRegister.InstanceId);
+            var serviceInstance = _factory.GetServiceInstance(serviceRegister.InstanceId);
 
             if (serviceInstance.Instance is null)
             {
-                var args = GetArgs(serviceRegister.ImplementationType, callingTarget, GetServiceOnRuntimeBase);
+                var args = GetArgs(serviceRegister.ImplementationType, GetServiceOnRuntimeBase);
                 var instance = Activator.CreateInstance(serviceRegister.ImplementationType, args ?? null);
                 serviceInstance.Instance = instance;
             }
             return serviceInstance.Instance;
         }
-        object? IRuntimeServiceProvider.GetServiceOnRuntime(Type sourceType, string callingTarget = "")
+        object? IRuntimeServiceProvider.GetServiceOnRuntime(Type sourceType)
         {
-            return GetServiceOnRuntimeBase(sourceType, GetTarget(callingTarget));
+            return GetServiceOnRuntimeBase(sourceType);
         }
         public TService GetService<TService>() where TService : class
         {

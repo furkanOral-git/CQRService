@@ -47,21 +47,6 @@ namespace CQRService.MiddlewareContainer.Factories.Concrete
             var serviceRegister = Services.RegisteredTypes.First(r => r.InstanceId == register.InstanceId);
             serviceRegister.UpdateImplementationType(register.ImplementationType);
             serviceRegister.UpdateRegistrationType(register.RegistrationType);
-            if (register.RegistrationType == RegistrationType.Scoped)
-            {
-                if (AnInstanceExist(serviceRegister.InstanceId)) FreeScopedInstances(serviceRegister);
-            }
-
-            void FreeScopedInstances(ServiceRegister serviceRegister)
-            {
-                Services.ScopedInstances
-                .Where(i => i.InstanceId == serviceRegister?.InstanceId)
-                .Select(s => Services.ScopedInstances.Remove(s));
-            }
-            bool AnInstanceExist(Guid instanceId)
-            {
-                return Services.ScopedInstances.Any(i => i.InstanceId == instanceId);
-            }
         }
     }
 }

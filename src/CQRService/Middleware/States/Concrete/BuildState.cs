@@ -21,7 +21,6 @@ namespace CQRService.Middleware.States.Concrete
             (
                 invocationArguments?.HandlerType
                 ?? throw new NotSetHandlerTypeException()
-                , invocationArguments.HandlerType.Name
             );
 
             var requestType = invocationArguments.RequestType;

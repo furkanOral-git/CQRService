@@ -9,6 +9,6 @@ namespace CQRService.Runtime
 {
     internal interface IRuntimeServiceProvider : IDiServiceProvider
     {
-        internal object? GetServiceOnRuntime(Type sourceType, string callingTarget = "");
+        internal object? GetServiceOnRuntime(Type sourceType);
     }
 }
