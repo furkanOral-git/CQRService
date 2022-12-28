@@ -21,7 +21,7 @@ namespace CQRService.RequestSenderService
         public static IMiddlewareResponse Send<TEntity>(this IRequestQueryBase<TEntity> request)
         where TEntity : class, new()
         {
-            
+            //This uses for indicate scope service life time of begin  
             _middleware.Provider.NewRequestId();
 
             var arg = new StateArguments
