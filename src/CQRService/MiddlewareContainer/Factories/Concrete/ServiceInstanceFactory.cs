@@ -33,13 +33,14 @@ namespace CQRService.MiddlewareContainer.Factories.Concrete
             {
                 serviceInstance = new ServiceInstance
                 (
-                    id
+                    id,
+                    Services.GetRequestId()
                 );
                 Services.Instances.Add(serviceInstance);
             }
             return serviceInstance;
         }
-       
+
 
     }
 }

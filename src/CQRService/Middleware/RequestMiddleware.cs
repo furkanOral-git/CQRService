@@ -11,6 +11,7 @@ namespace CQRService.Middleware
         private MiddlewareState? _state;
         private IMiddlewareResponse? _middlewareResponse;
         public IDiServiceProvider Provider { get; init; }
+        
         private RequestMiddleware()
         {
             _middlewareResponse = default;

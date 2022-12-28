@@ -6,16 +6,24 @@ using CQRService.Middleware.Responses;
 using CQRService.Middleware.Responses.SuccessResults;
 using CQRService.Middleware.States;
 using CQRService.Middleware.States.Concrete;
+using CQRService.MiddlewareContainer;
 using CQRService.Runtime;
 
 namespace CQRService.RequestSenderService
 {
-    public static class RequestSenderService 
+    public static class RequestSenderService
     {
+        private static RequestMiddleware _middleware;
+        static RequestSenderService()
+        {
+            _middleware = RequestMiddleware.Get();
+        }
         public static IMiddlewareResponse Send<TEntity>(this IRequestQueryBase<TEntity> request)
         where TEntity : class, new()
         {
-            RequestMiddleware _middleware = RequestMiddleware.Get();
+            
+            _middleware.Provider.NewRequestId();
+
             var arg = new StateArguments
             (
                 new InvocationArguments()
@@ -44,10 +52,10 @@ namespace CQRService.RequestSenderService
             }
             return false;
         }
-        
-       
-        
-        
+
+
+
+
 
 
 

@@ -43,10 +43,11 @@ namespace CQRService.MiddlewareContainer
             return GetInstanceByRegisterType(serviceRegister, serviceInstance, args);
 
         }
-        
+
         private object GetInstanceByRegisterType(ServiceRegister serviceRegister, ServiceInstance serviceInstance, object[]? args)
         {
             object? instance = default;
+
             if (serviceInstance.Instance is null)
             {
                 instance = Activator.CreateInstance(serviceRegister.ImplementationType, args ?? null);
@@ -63,7 +64,15 @@ namespace CQRService.MiddlewareContainer
                     serviceInstance.Instance = instance;
                     break;
                 case RegistrationType.Scoped:
-                    instance = serviceInstance.Instance;
+
+                    if (_container.GetRequestId() == serviceInstance.RequestId)
+                    {
+                        instance = serviceInstance.Instance;
+                        break;
+                    }
+                    instance = Activator.CreateInstance(serviceRegister.ImplementationType, args ?? null);
+                    serviceInstance.Instance = instance;
+                    serviceInstance.RequestId = _container.GetRequestId();
                     break;
             }
             if (instance is null)
@@ -112,6 +121,7 @@ namespace CQRService.MiddlewareContainer
             return (TService)GetService(typeof(TService));
         }
 
+        void IDiServiceProvider.NewRequestId() => _container.NewRequestId();
 
     }
 }
