@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CQRService.Entities.BaseInterfaces;
-using CQRService.Entities.ExceptionHandling;
-using CQRService.Middleware.Responses;
+
 
 namespace CQRService
 {
