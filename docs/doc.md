@@ -1,14 +1,16 @@
 # **Contents**
 
-## 1. Service Registration
+### 1. Service Registration
 
-## 2. Requests
+### 2. Requests
 
-## 3. Interceptors
+### 3. Stacks
 
-## 4. ExceptionHandling
+### 4. Interceptors
 
-## 5. Responses
+### 5. ExceptionHandling
+
+### 6. Responses
 
 
 <br/>
@@ -16,18 +18,14 @@
 ## **1. Service Registration**
 ---
 This library use its own dependency injection module for minimal dependency to other projects. All handlers will get their dependencies from  **ContainerServiceProvider** class. This class inherited from **IDiServiceProvider**.
-Service registration operations are manage by **DiServiceCollection** class that implements **IDiServiceCollection**.
-
-<br>
-
->**! Warning :** Service dependencies other than the library will not be provided by the distributor. If needed service can be called by controller.
+Service registration operations are manage by **ContainerServiceCollection** class that implements **IDiServiceCollection**.
 
 <br/>
 
 - ### Module Based Registration
 Modules that inject to services and dependencies should be inherited from InjectionModuleBase
 
-### Usage of **InjectionModuleBase** abstract class :
+#### Usage of **InjectionModuleBase** abstract class :
 
 <br/>
 
@@ -53,6 +51,8 @@ namespace Project.Application.InjectionModules
 }
 
 ```
+
+
 Then,
 
 ```cs
@@ -71,6 +71,21 @@ builder.Services.AddControllers();
 ...
 
 ```
+<br/>
+
+- ### Registration Types And Usage Areas
+
+<br/>
+
+#### **Scope Registration Type :** 
+This registration type provide services while CQRService middleware receive a request well we could use this for interceptors that mentioned on another subject. ContainerServiceProvider create a instance per sending request.
+
+#### **Singeleton Registration Type :**
+This registration type provide only single instance everytime and everywhere.
+
+#### **Transient Registration Type :**
+This registration type always provide new instance.  
+
 <br/>
 
 ## **2. Requests**
@@ -142,7 +157,10 @@ Queries have differences according to requests on handling. **IQueryHandler<TQue
 
 <br/>
 
-## **3. Interceptors**
+## **3. Stacks**
+---
+
+## **4. Interceptors**
 ---
 
 Interceptors are as you know by their name work when handler's handle method run. This library's middleware receive the request and  return a object that implements **IMiddlewareResponse** interface. We can input objects what you want to this response object and also can use for run specific operation on request's handler operations.
