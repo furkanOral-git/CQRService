@@ -4,13 +4,11 @@
 
 ### 2. Requests
 
-### 3. Stacks
+### 3. Stacks : ExceptionHandling && Communication of Aspects and Handler
 
 ### 4. Interceptors
 
-### 5. ExceptionHandling
-
-### 6. Responses
+### 5. Responses
 
 
 <br/>
@@ -41,11 +39,14 @@ namespace Project.Application.InjectionModules
             //requiered for handlers
             services.AddSingleton<IProductRepository,EfProductRepository>();
             services.AddSingleton<IUserRepository,EfUserRepository>();
-
+            //or you can use this service for single request while interception state
+            services.AddScoped<IJwtRepository,JwtRepository>();
+            
             //this registrations are necessary
             services.AddSingleton<CreateProductRequestHandler>();
             //or you can add like;
             services.AddTransient<GetProductByIdQueryHandler>();
+            
         }
     }
 }
@@ -78,7 +79,7 @@ builder.Services.AddControllers();
 <br/>
 
 #### **Scope Registration Type :** 
-This registration type provide services while CQRService middleware receive a request well we could use this for interceptors that mentioned on another subject. ContainerServiceProvider create a instance per sending request.
+This registration type provide services while CQRService middleware receive a request. Well, we could use this for interceptors that mentioned on another subject. ContainerServiceProvider creates new instance per request.
 
 #### **Singeleton Registration Type :**
 This registration type provide only single instance everytime and everywhere.
