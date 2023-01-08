@@ -98,6 +98,7 @@ namespace CQRService.MiddlewareContainer
             return (TService)GetService(typeof(TService));
         }
         Guid IDiServiceProvider.NewRequestId() => _container.NewRequestId();
-
+        void IDiServiceProvider.RemoveId(Guid id) => _container.RemoveId(id);
+        
     }
 }

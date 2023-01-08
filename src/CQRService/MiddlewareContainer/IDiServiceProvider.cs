@@ -10,6 +10,7 @@ namespace CQRService.MiddlewareContainer
     {
         public TService GetService<TService>() where TService : class;
         internal Guid NewRequestId();
+        internal void RemoveId(Guid id);
 
 
     }
