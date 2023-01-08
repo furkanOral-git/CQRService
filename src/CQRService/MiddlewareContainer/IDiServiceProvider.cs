@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace CQRService.MiddlewareContainer
 {
-    public interface IDiServiceProvider
+    internal interface IDiServiceProvider
     {
         public TService GetService<TService>(Guid providerRequestId) where TService : class;
-        internal Guid NewRequestId();
+        public Guid NewRequestId();
         
 
 

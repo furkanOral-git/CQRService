@@ -14,7 +14,7 @@ using CQRService.Runtime;
 
 namespace CQRService.MiddlewareContainer
 {
-    public sealed class ContainerServiceProvider : IDiServiceProvider
+    internal sealed class ContainerServiceProvider : IDiServiceProvider
     {
         private static ContainerServiceProvider? _instance;
         private MiddlewareServiceContainer _container;
