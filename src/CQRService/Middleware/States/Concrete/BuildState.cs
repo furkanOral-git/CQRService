@@ -1,5 +1,6 @@
 
 using CQRService.ExceptionHandling.MiddlewareExceptions;
+using CQRService.Middleware.Requests;
 using CQRService.MiddlewareContainer;
 using CQRService.Runtime.Interceptors;
 
@@ -13,10 +14,10 @@ namespace CQRService.Middleware.States.Concrete
         {
 
         }
-        public override void Main()
+        public override void Main(MiddlewareRequest request)
         {
             var invocationArguments = this._arguments.GetInvocationArguments();
-            var casted = _serviceProvider as ContainerServiceProvider;
+            var casted = request.Provider as ContainerServiceProvider;
             invocationArguments.Handler = casted?.GetService
             (
                 invocationArguments?.HandlerType
@@ -29,8 +30,8 @@ namespace CQRService.Middleware.States.Concrete
             : Array.Empty<RequestInterceptor>();
 
             if (invocationArguments.HasInterceptors)
-                _middleware.TransitionTo(new ExecutionWithInterceptionState(this._arguments));
-            else _middleware.TransitionTo(new ExecutionState(this._arguments));
+                request.TransitionTo(new ExecutionWithInterceptionState(this._arguments));
+            else request.TransitionTo(new ExecutionState(this._arguments));
 
         }
 

@@ -3,6 +3,7 @@ using CQRService.Entities.ExceptionHandling;
 using CQRService.Entities.Interceptors;
 using CQRService.Entities.Middleware;
 using CQRService.ExceptionHandling;
+using CQRService.Middleware.Requests;
 using CQRService.Middleware.Responses;
 using CQRService.Middleware.Responses.ErrorResults;
 using CQRService.Middleware.Responses.SuccessResults;
@@ -17,7 +18,7 @@ namespace CQRService.Middleware.States.Concrete
         {
 
         }
-        public override void Main()
+        public override void Main(MiddlewareRequest request)
         {
             var results = this._arguments.GetOperationResult();
 
@@ -38,8 +39,8 @@ namespace CQRService.Middleware.States.Concrete
                 response = CreateErrorResponse(_errorStack);
             }
 
-            _middleware.SetMiddlewareResponse(response);
-            _middleware.ClearState();
+            request.SetRequestResponse(response);
+            request.ClearState();
         }
         private MiddlewareErrorResponse CreateErrorResponse(ErrorStack results)
         {

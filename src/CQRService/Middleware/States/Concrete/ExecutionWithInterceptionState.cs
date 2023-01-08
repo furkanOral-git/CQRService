@@ -1,5 +1,6 @@
 using CQRS.Runtime.Extensions;
 using CQRService.ExceptionHandling;
+using CQRService.Middleware.Requests;
 using CQRService.Runtime;
 
 namespace CQRService.Middleware.States.Concrete
@@ -11,7 +12,7 @@ namespace CQRService.Middleware.States.Concrete
         {
 
         }
-        public override void Main()
+        public override void Main(MiddlewareRequest request)
         {
             var invocationArguments = this._arguments.GetInvocationArguments();
             var aspects = invocationArguments.Interceptors;
@@ -34,7 +35,7 @@ namespace CQRService.Middleware.States.Concrete
             }
 
             this._arguments.SetOperationResult(invocation.Results);
-            _middleware.TransitionTo(new MiddlewareResponseState(this._arguments));
+            request.TransitionTo(new MiddlewareResponseState(this._arguments));
 
         }
 

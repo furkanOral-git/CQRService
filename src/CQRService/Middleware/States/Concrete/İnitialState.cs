@@ -1,6 +1,7 @@
 using CQRService.Entities.ExceptionHandling;
 using CQRService.Entities.Interceptors;
 using CQRService.ExceptionHandling.MiddlewareExceptions;
+using CQRService.Middleware.Requests;
 using CQRService.Runtime;
 using CQRService.Runtime.Interceptors;
 
@@ -15,7 +16,7 @@ namespace CQRService.Middleware.States.Concrete
             _errorStack = _serviceProvider.GetService<ErrorStack>();
             _resultStack = _serviceProvider.GetService<InterceptorResultStack>();
         }
-        public override void Main()
+        public override void Main(MiddlewareRequest request)
         {
             var invocationArguments = this._arguments.GetInvocationArguments();
 
@@ -25,7 +26,7 @@ namespace CQRService.Middleware.States.Concrete
 
             IfHasAspectSetTrue(invocationArguments);
 
-            _middleware.TransitionTo(new BuildState(this._arguments));
+            request.TransitionTo(new BuildState(this._arguments));
         }
 
         private void IfHasAspectSetTrue(InvocationArguments arguments)

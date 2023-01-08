@@ -14,22 +14,22 @@ namespace CQRService.Middleware.Requests
         private MiddlewareState? _state;
         private IMiddlewareResponse? _middlewareResponse;
         public IDiServiceProvider Provider { get; init; }
-        public Guid _requestId;
+        public Guid _providerRequestId;
 
-        public MiddlewareRequest(IDiServiceProvider provider, Guid requestId)
+        public MiddlewareRequest(IDiServiceProvider provider, Guid providerRequestId)
         {
             _middlewareResponse = default;
             Provider = provider;
-            _requestId = requestId;
+            _providerRequestId = providerRequestId;
         }
         public void TransitionTo(MiddlewareState state)
         {
             _state = state;
-            _state.Main();
+            _state.Main(this);
         }
         public void SetRequestResponse(IMiddlewareResponse response)
         {
-            throw new NotImplementedException();
+            _middlewareResponse = response;
         }
 
         public IMiddlewareResponse GetRequestResponse()

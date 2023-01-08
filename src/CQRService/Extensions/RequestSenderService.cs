@@ -18,7 +18,7 @@ namespace CQRService.RequestSenderService
         public static IMiddlewareResponse Send<TEntity>(this IRequestQueryBase<TEntity> request)
         where TEntity : class, new()
         {
-            
+
 
             var arg = new StateArguments
             (
@@ -30,6 +30,7 @@ namespace CQRService.RequestSenderService
             );
 
             var middlewareRequest = _middleware.CreateNewRequest(_middleware.Provider);
+            middlewareRequest.TransitionTo(new İnitialState(arg));
             return middlewareRequest.GetRequestResponse();
         }
         public static bool TryGetData<TResponse>(this IMiddlewareResponse response, out TResponse? data)
