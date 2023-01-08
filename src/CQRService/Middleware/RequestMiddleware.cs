@@ -1,4 +1,5 @@
 using CQRService.ExceptionHandling.MiddlewareExceptions;
+using CQRService.Middleware.Requests;
 using CQRService.Middleware.Responses;
 using CQRService.Middleware.States;
 using CQRService.MiddlewareContainer;
@@ -11,7 +12,7 @@ namespace CQRService.Middleware
         private MiddlewareState? _state;
         private IMiddlewareResponse? _middlewareResponse;
         public IDiServiceProvider Provider { get; init; }
-        
+
         private RequestMiddleware()
         {
             _middlewareResponse = default;
@@ -25,8 +26,14 @@ namespace CQRService.Middleware
             }
             return _instance;
         }
+        public IMiddlewareRequest CreateNewRequest(IDiServiceProvider provider)
+        {
+            //This uses for indicate scope service life time of begin  
+            var requestId = Provider.NewRequestId();
+            return new MiddlewareRequest(provider, requestId);
+        }
 
-        
+
 
 
     }

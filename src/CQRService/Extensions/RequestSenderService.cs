@@ -18,8 +18,7 @@ namespace CQRService.RequestSenderService
         public static IMiddlewareResponse Send<TEntity>(this IRequestQueryBase<TEntity> request)
         where TEntity : class, new()
         {
-            //This uses for indicate scope service life time of begin  
-            _middleware.Provider.NewRequestId();
+            
 
             var arg = new StateArguments
             (
@@ -30,8 +29,8 @@ namespace CQRService.RequestSenderService
                 }
             );
 
-            _middleware.TransitionTo(new İnitialState(arg));
-            return _middleware.GetMiddlewareResponse();
+            var middlewareRequest = _middleware.CreateNewRequest(_middleware.Provider);
+            return middlewareRequest.GetRequestResponse();
         }
         public static bool TryGetData<TResponse>(this IMiddlewareResponse response, out TResponse? data)
         {

@@ -24,9 +24,10 @@ namespace CQRService.MiddlewareContainer
             if (_instance is null) _instance = new MiddlewareServiceContainer();
             return _instance;
         }
-        internal void NewRequestId()
+        internal Guid NewRequestId()
         {
             _requestId = Guid.NewGuid();
+            return _requestId;
         }
         internal Guid GetRequestId()
         {

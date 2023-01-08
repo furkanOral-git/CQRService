@@ -97,7 +97,7 @@ namespace CQRService.MiddlewareContainer
         {
             return (TService)GetService(typeof(TService));
         }
-        void IDiServiceProvider.NewRequestId() => _container.NewRequestId();
+        Guid IDiServiceProvider.NewRequestId() => _container.NewRequestId();
 
     }
 }
