@@ -24,7 +24,7 @@ namespace CQRService.MiddlewareContainer.Factories.Concrete
             return _instance;
         }
 
-        public ServiceInstance GetServiceInstance(Guid id)
+        public ServiceInstance GetServiceInstance(Guid id, Guid providerRequestId)
         {
 
             var serviceInstance = Services.Instances.SingleOrDefault(i => i.InstanceId == id);
@@ -34,7 +34,7 @@ namespace CQRService.MiddlewareContainer.Factories.Concrete
                 serviceInstance = new ServiceInstance
                 (
                     id,
-                    Services.GetRequestId()
+                    providerRequestId
                 );
                 Services.Instances.Add(serviceInstance);
             }

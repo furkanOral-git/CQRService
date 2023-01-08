@@ -8,7 +8,7 @@ namespace CQRService.MiddlewareContainer.Factories.Abstract
 {
     internal interface IServiceInstanceFactory : IFactory<ServiceInstance>
     {
-        public ServiceInstance GetServiceInstance(Guid id);
+        public ServiceInstance GetServiceInstance(Guid id, Guid providerRequestId);
 
     }
 }

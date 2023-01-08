@@ -9,7 +9,7 @@ namespace CQRService.Middleware.States
     {
         private InvocationArguments _invocationArguments;
         private OperationResult? _result;
-
+        
         public StateArguments(InvocationArguments invocationArguments)
         {
             _invocationArguments = invocationArguments;

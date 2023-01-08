@@ -15,9 +15,8 @@ namespace CQRService.Runtime
         public Type? RequestType { get; set; }
         public Type? HandlerType { get; set; }
         public RequestInterceptor[] Interceptors { get; set; }
-        public bool HasHandlerConstructorTypes { get; set; }
         public bool HasInterceptors { get; set; }
-
+        public Guid RequestId { get; set; }
         public InvocationArguments()
         {
             Interceptors = Array.Empty<RequestInterceptor>();

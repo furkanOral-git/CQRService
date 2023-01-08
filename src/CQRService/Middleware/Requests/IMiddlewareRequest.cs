@@ -12,6 +12,6 @@ namespace CQRService.Middleware.Requests
         public void TransitionTo(MiddlewareState state);
         public void SetRequestResponse(IMiddlewareResponse response);
         public IMiddlewareResponse GetRequestResponse();
-        public void End();
+        
     }
 }

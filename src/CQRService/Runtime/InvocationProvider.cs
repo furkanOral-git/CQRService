@@ -14,9 +14,7 @@ namespace CQRService.Runtime
         public static Invocation CreateInvocation(InvocationArguments args, IDiServiceProvider serviceProvider, ErrorStack exStack, InterceptorResultStack reStack)
         {
             var invocation = new Invocation(
-                args.Request ?? null,
-                args.Handler ?? null,
-                args.HandleMethod ?? null,
+                args,
                 serviceProvider,
                 exStack,
                 reStack

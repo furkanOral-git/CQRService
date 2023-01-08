@@ -9,12 +9,12 @@ namespace CQRService.MiddlewareContainer.Entities
     internal class ServiceInstance : ContainerEntity
     {
         public object Instance { get; set; }
-        public Guid RequestId { get; internal set; }
+        public Guid CreatedId { get; internal set; }
 
-        public ServiceInstance(Guid id, Guid requestId)
+        public ServiceInstance(Guid id, Guid createdId)
         {
             InstanceId = id;
-            RequestId = requestId;
+            CreatedId = createdId;
         }
 
     }

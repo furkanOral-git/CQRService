@@ -10,7 +10,6 @@ namespace CQRService.MiddlewareContainer
     {
         public List<ServiceRegister> RegisteredTypes { get; init; }
         public List<ServiceInstance> Instances { get; init; }
-        public List<Guid> Requests { get; init; }
 
         private static MiddlewareServiceContainer? _instance;
 
@@ -18,7 +17,6 @@ namespace CQRService.MiddlewareContainer
         {
             RegisteredTypes = new();
             Instances = new();
-            Requests = new();
         }
         internal static MiddlewareServiceContainer InitContainer()
         {
@@ -28,13 +26,9 @@ namespace CQRService.MiddlewareContainer
         internal Guid NewRequestId()
         {
             var requestId = Guid.NewGuid();
-            Requests.Add(requestId);
             return requestId;
         }
-        internal void RemoveId(Guid id)
-        {
-            Requests.Remove(id);
-        }
+        
 
 
 

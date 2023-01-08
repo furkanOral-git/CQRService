@@ -13,8 +13,9 @@ namespace CQRService.Middleware.States.Concrete
 
         public İnitialState(StateArguments args) : base(args)
         {
-            _errorStack = _serviceProvider.GetService<ErrorStack>();
-            _resultStack = _serviceProvider.GetService<InterceptorResultStack>();
+            var providerRequestId = args.GetInvocationArguments().RequestId;
+            _errorStack = _serviceProvider.GetService<ErrorStack>(providerRequestId);
+            _resultStack = _serviceProvider.GetService<InterceptorResultStack>(providerRequestId);
         }
         public override void Main(MiddlewareRequest request)
         {

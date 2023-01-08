@@ -14,7 +14,7 @@ using CQRService.Runtime;
 
 namespace CQRService.MiddlewareContainer
 {
-    public sealed class ContainerServiceProvider :  IDiServiceProvider
+    public sealed class ContainerServiceProvider : IDiServiceProvider
     {
         private static ContainerServiceProvider? _instance;
         private MiddlewareServiceContainer _container;
@@ -30,20 +30,20 @@ namespace CQRService.MiddlewareContainer
             if (_instance is null) _instance = new ContainerServiceProvider();
             return _instance;
         }
-        internal object GetService(Type sourceType)
+        internal object GetService(Type sourceType, Guid providerRequestId)
         {
             var serviceRegister = _container.RegisteredTypes.SingleOrDefault(r => r.SourceType == sourceType || r.ImplementationType == sourceType);
             if (serviceRegister is null)
             {
                 throw new NotRegisteredTypeException(MiddlewareContainerExceptionMessages.NotRegisteredTypeExceptionMessage);
             }
-            var args = GetArgs(serviceRegister.ImplementationType, GetService);
-            var serviceInstance = _factory.GetServiceInstance(serviceRegister.InstanceId);
+            var args = GetArgs(serviceRegister.ImplementationType, providerRequestId, GetService);
+            var serviceInstance = _factory.GetServiceInstance(serviceRegister.InstanceId, providerRequestId);
 
-            return GetInstanceByRegisterType(serviceRegister, serviceInstance, args);
+            return GetInstanceByRegisterType(serviceRegister, serviceInstance, args, providerRequestId);
 
         }
-        private object GetInstanceByRegisterType(ServiceRegister serviceRegister, ServiceInstance serviceInstance, object[]? args)
+        private object GetInstanceByRegisterType(ServiceRegister serviceRegister, ServiceInstance serviceInstance, object[]? args, Guid providerRequestId)
         {
             object? instance = default;
 
@@ -64,14 +64,14 @@ namespace CQRService.MiddlewareContainer
                     break;
                 case RegistrationType.Scoped:
 
-                    if (_container.GetRequestId() == serviceInstance.RequestId)
+                    if (providerRequestId == serviceInstance.CreatedId)
                     {
                         instance = serviceInstance.Instance;
                         break;
                     }
                     instance = Activator.CreateInstance(serviceRegister.ImplementationType, args ?? null);
                     serviceInstance.Instance = instance;
-                    serviceInstance.RequestId = _container.GetRequestId();
+                    serviceInstance.CreatedId = providerRequestId;
                     break;
             }
             if (instance is null)
@@ -80,7 +80,7 @@ namespace CQRService.MiddlewareContainer
             }
             return instance;
         }
-        private object[]? GetArgs(Type impType, Func<Type, object?> selectOperation)
+        private object[]? GetArgs(Type impType, Guid providerRequestId, Func<Type, Guid, object?> selectOperation)
         {
             var parameterInfos = impType
             .GetConstructors()[0]
@@ -89,16 +89,16 @@ namespace CQRService.MiddlewareContainer
             var hasArgs = (parameterInfos.Length != 0) ? true : false;
             if (hasArgs)
             {
-                return parameterInfos.Select(p => p.ParameterType).Select(t => selectOperation.Invoke(t)).ToArray();
+                return parameterInfos.Select(p => p.ParameterType).Select(t => selectOperation.Invoke(t, providerRequestId)).ToArray();
             }
             return default;
         }
-        public TService GetService<TService>() where TService : class
+        public TService GetService<TService>(Guid providerRequestId) where TService : class
         {
-            return (TService)GetService(typeof(TService));
+            return (TService)GetService(typeof(TService), providerRequestId);
         }
         Guid IDiServiceProvider.NewRequestId() => _container.NewRequestId();
-        void IDiServiceProvider.RemoveId(Guid id) => _container.RemoveId(id);
         
+
     }
 }

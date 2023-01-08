@@ -47,9 +47,6 @@ namespace CQRService.Middleware.Requests
             this._middlewareResponse = null;
         }
 
-        public void End()
-        {
-            Provider.RemoveId(_providerRequestId);
-        }
+        
     }
 }

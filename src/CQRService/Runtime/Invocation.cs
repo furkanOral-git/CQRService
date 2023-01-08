@@ -14,19 +14,15 @@ namespace CQRService.Runtime
 {
     internal sealed record Invocation : IInterceptionAfter, IInterceptionBefore, IInterceptionException, IInterceptionSuccess
     {
-        public object? Request { get; init; }
-        public MethodInfo? HandleMethod { get; init; }
-        public object? HandlerObject { get; init; }
+        public InvocationArguments Args { get; init; }
         public OperationResult Results { get; init; }
         public InterceptorResultStack ResultStack { get; init; }
         public ErrorStack ErrorStack { get; init; }
         private IDiServiceProvider _serviceProvider;
 
-        public Invocation(object? request, object? handler, MethodInfo? handleMethod, IDiServiceProvider serviceProvider, ErrorStack erStack, InterceptorResultStack reStack)
+        public Invocation(InvocationArguments args, IDiServiceProvider serviceProvider, ErrorStack erStack, InterceptorResultStack reStack)
         {
-            Request = request;
-            HandlerObject = handler;
-            HandleMethod = handleMethod;
+            Args = args;
             Results = new OperationResult();
             _serviceProvider = serviceProvider;
             ErrorStack = erStack;
@@ -34,7 +30,7 @@ namespace CQRService.Runtime
         }
         public void Invoke()
         {
-            var response = HandleMethod?.Invoke(HandlerObject, new object[] { Request, ErrorStack, ResultStack });
+            var response = Args.HandleMethod?.Invoke(Args.Handler, new object[] { Args.Request, ErrorStack, ResultStack });
             if (response is not null)
             {
                 Results.Response = response;
@@ -45,12 +41,12 @@ namespace CQRService.Runtime
         public TRequest GetRequestForControl<TRequest>()
         where TRequest : class, IRequestQueryBase, new()
         {
-            return Request as TRequest ?? throw new UnaccessedRequestException(RuntimeExceptionMessages.UnaccessedRequestExceptionMessage);
+            return Args.Request as TRequest ?? throw new UnaccessedRequestException(RuntimeExceptionMessages.UnaccessedRequestExceptionMessage);
         }
 
         public TSource? GetService<TSource>() where TSource : class
         {
-            return _serviceProvider.GetService<TSource>();
+            return _serviceProvider.GetService<TSource>(Args.RequestId);
         }
     }
 }
