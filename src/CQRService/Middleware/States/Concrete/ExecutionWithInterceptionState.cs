@@ -16,7 +16,7 @@ namespace CQRService.Middleware.States.Concrete
         {
             var invocationArguments = this._arguments.GetInvocationArguments();
             var aspects = invocationArguments.Interceptors;
-            var invocation = InvocationProvider.CreateInvocation(invocationArguments, _serviceProvider, _errorStack, _resultStack);
+            var invocation = InvocationProvider.CreateInvocation(invocationArguments, request.Provider, _errorStack, _resultStack);
 
 
             invocation.Results.IsOperationSuccess = true;

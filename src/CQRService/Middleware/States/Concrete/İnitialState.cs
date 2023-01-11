@@ -2,6 +2,7 @@ using CQRService.Entities.ExceptionHandling;
 using CQRService.Entities.Interceptors;
 using CQRService.ExceptionHandling.MiddlewareExceptions;
 using CQRService.Middleware.Requests;
+using CQRService.MiddlewareContainer;
 using CQRService.Runtime;
 using CQRService.Runtime.Interceptors;
 
@@ -14,11 +15,10 @@ namespace CQRService.Middleware.States.Concrete
         public İnitialState(StateArguments args) : base(args)
         {
             var providerRequestId = args.GetInvocationArguments().RequestId;
-            _errorStack = _serviceProvider.GetService<ErrorStack>(providerRequestId);
-            _resultStack = _serviceProvider.GetService<InterceptorResultStack>(providerRequestId);
         }
         public override void Main(MiddlewareRequest request)
         {
+            InitStacks(request.Provider, request._providerRequestId);
             var invocationArguments = this._arguments.GetInvocationArguments();
 
             var handlerType = invocationArguments.RequestType?.GetNestedTypes()[0];
@@ -36,7 +36,11 @@ namespace CQRService.Middleware.States.Concrete
             var isExist = requestType?.GetCustomAttributesData().Any(c => c.AttributeType.IsAssignableTo(typeof(RequestInterceptor)));
             arguments.HasInterceptors = isExist ?? throw new NotSetRequestTypeException();
         }
-
+        private void InitStacks(IDiServiceProvider provider, Guid providerRequestId)
+        {
+            _errorStack = provider.GetService<ErrorStack>(providerRequestId);
+            _resultStack = provider.GetService<InterceptorResultStack>(providerRequestId);
+        }
 
     }
 }

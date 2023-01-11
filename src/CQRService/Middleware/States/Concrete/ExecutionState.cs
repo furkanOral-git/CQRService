@@ -18,7 +18,7 @@ namespace CQRService.Middleware.States.Concrete
         {
 
             var invocationArguments = this._arguments.GetInvocationArguments();
-            var invocation = InvocationProvider.CreateInvocation(invocationArguments, _serviceProvider, _errorStack, _resultStack);
+            var invocation = InvocationProvider.CreateInvocation(invocationArguments, request.Provider, _errorStack, _resultStack);
 
             try
             {
