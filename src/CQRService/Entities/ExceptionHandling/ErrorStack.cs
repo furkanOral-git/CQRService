@@ -18,7 +18,7 @@ namespace CQRService.Entities.ExceptionHandling
         {
             Errors = Array.Empty<ErrorResult>();
         }
-        public void AddErrorResult(Exception e, string title, string sender, HttpStatusCode status = HttpStatusCode.BadRequest)
+        internal void AddErrorResult(Exception e, string title, string sender, HttpStatusCode status = HttpStatusCode.BadRequest)
         {
             var error = CreateError(e, title, sender, status);
             AddErrorResult(error);
