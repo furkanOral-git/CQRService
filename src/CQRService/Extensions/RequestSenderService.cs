@@ -19,7 +19,7 @@ namespace CQRService.RequestSenderService
         where TEntity : class, new()
         {
             var middlewareRequest = _middleware.CreateNewRequest(_middleware.Provider);
-            
+
             var arg = new StateArguments
             (
                 new InvocationArguments()
@@ -32,8 +32,31 @@ namespace CQRService.RequestSenderService
 
             middlewareRequest.TransitionTo(new İnitialState(arg));
             var response = middlewareRequest.GetRequestResponse();
-            
+
             return response;
+        }
+        public static Task<IMiddlewareResponse> SendAsync<TEntity>(this IRequestQueryBase<TEntity> request)
+        where TEntity : class, new()
+        {
+            return Task.Factory.StartNew<IMiddlewareResponse>(()=>
+            {
+                var middlewareRequest = _middleware.CreateNewRequest(_middleware.Provider);
+
+                var arg = new StateArguments
+                (
+                    new InvocationArguments()
+                    {
+                        Request = request,
+                        RequestType = request.GetType(),
+                        RequestId = middlewareRequest._providerRequestId
+                    }
+                );
+
+                middlewareRequest.TransitionTo(new İnitialState(arg));
+                var response = middlewareRequest.GetRequestResponse();
+
+                return response;
+            });
         }
         public static bool TryGetData<TResponse>(this IMiddlewareResponse response, out TResponse? data)
         {
