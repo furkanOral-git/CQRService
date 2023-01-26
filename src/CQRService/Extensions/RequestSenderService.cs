@@ -31,9 +31,7 @@ namespace CQRService.RequestSenderService
             );
 
             middlewareRequest.TransitionTo(new İnitialState(arg));
-            var response = middlewareRequest.GetRequestResponse();
-
-            return response;
+            return middlewareRequest.GetRequestResponse();
         }
         public static Task<IMiddlewareResponse> SendAsync<TEntity>(this IRequestQueryBase<TEntity> request)
         where TEntity : class, new()
@@ -53,9 +51,7 @@ namespace CQRService.RequestSenderService
                 );
 
                 middlewareRequest.TransitionTo(new İnitialState(arg));
-                var response = middlewareRequest.GetRequestResponse();
-
-                return response;
+                return middlewareRequest.GetRequestResponse();
             });
         }
         public static bool TryGetData<TResponse>(this IMiddlewareResponse response, out TResponse? data)
