@@ -10,10 +10,11 @@ namespace CQRService.MiddlewareContainer.Factories.Concrete
 {
     internal class ServiceInstanceFactory : BaseFactory, IServiceInstanceFactory
     {
+        private readonly object _lockObject;
         private static IServiceInstanceFactory? _instance;
         private ServiceInstanceFactory()
         {
-
+            _lockObject = new object();
         }
         public static IServiceInstanceFactory GetFactory()
         {
@@ -26,19 +27,22 @@ namespace CQRService.MiddlewareContainer.Factories.Concrete
 
         public ServiceInstance GetServiceInstance(Guid id, Guid providerRequestId)
         {
-
-            var serviceInstance = Services.Instances.SingleOrDefault(i => i.InstanceId == id);
-
-            if (serviceInstance is null)
+            lock (_lockObject)
             {
-                serviceInstance = new ServiceInstance
-                (
-                    id,
-                    providerRequestId
-                );
-                Services.Instances.Add(serviceInstance);
+                bool IsExist = Services.Instances.Any(i => i.InstanceId == id);
+                if (!IsExist)
+                {
+                    var serviceInstance = new ServiceInstance
+                    (
+                        id,
+                        providerRequestId
+                    );
+                    Services.Instances.Add(serviceInstance);
+                    return serviceInstance;
+                }
+                
             }
-            return serviceInstance;
+            return Services.Instances.Single(i => i.InstanceId == id);
         }
 
 

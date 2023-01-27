@@ -80,7 +80,7 @@ namespace CQRService.MiddlewareContainer
             }
             return instance;
         }
-        private object[]? GetArgs(Type impType, Guid providerRequestId, Func<Type, Guid, object?> selectOperation)
+        private object[]? GetArgs(Type impType, Guid providerRequestId, Func<Type, Guid, object?> getService)
         {
             var parameterInfos = impType
             .GetConstructors()[0]
@@ -89,7 +89,7 @@ namespace CQRService.MiddlewareContainer
             var hasArgs = (parameterInfos.Length != 0) ? true : false;
             if (hasArgs)
             {
-                return parameterInfos.Select(p => p.ParameterType).Select(t => selectOperation.Invoke(t, providerRequestId)).ToArray();
+                return parameterInfos.Select(p => p.ParameterType).Select(t => getService.Invoke(t, providerRequestId)).ToArray();
             }
             return default;
         }
