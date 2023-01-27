@@ -8,7 +8,7 @@ namespace CQRService.MiddlewareContainer.InjectionModules
     public abstract class InjectionModuleBase
     {
         public abstract void LoadServices(IDiServiceCollection services);
-        private static void AddCQRService()
+        private static void AddStacks()
         {
             var services = (IDiServiceCollection)ContainerServiceCollection.InitServiceCollection();
             services.AddScoped<IErrorResultStack, ErrorStack>();
@@ -16,7 +16,7 @@ namespace CQRService.MiddlewareContainer.InjectionModules
         }
         static InjectionModuleBase()
         {
-            AddCQRService();
+            AddStacks();
         }
     }
 }
