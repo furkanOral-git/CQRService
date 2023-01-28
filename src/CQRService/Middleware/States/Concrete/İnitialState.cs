@@ -14,7 +14,7 @@ namespace CQRService.Middleware.States.Concrete
 
         public İnitialState(StateArguments args) : base(args)
         {
-            var providerRequestId = args.GetInvocationArguments().RequestId;
+            
         }
         public override void Main(MiddlewareRequest request)
         {

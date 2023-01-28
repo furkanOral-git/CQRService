@@ -11,15 +11,16 @@ namespace CQRService.Entities.ExceptionHandling
 {
     public record ErrorStack : IErrorResultStack, IErrorStackAccessor
     {
-        public int Count { get { return Errors.Length; } }
-        public ErrorResult[] Errors { get; private set; }
-        public ErrorResult this[int indx] { get { return Errors[indx]; } }
+        public int Count { get { return (Errors is null) ? 0 : Errors.Length; } }
+        public ErrorResult[]? Errors { get; private set; }
+        public ErrorResult this[int indx] { get { return (Errors is null) ? default : Errors[indx]; } }
         public ErrorStack()
         {
-            Errors = Array.Empty<ErrorResult>();
+           
         }
         internal void AddErrorResult(Exception e, string title, string sender, HttpStatusCode status = HttpStatusCode.BadRequest)
         {
+            Errors ??= Array.Empty<ErrorResult>();
             var error = CreateError(e, title, sender, status);
             AddErrorResult(error);
         }
@@ -69,6 +70,6 @@ namespace CQRService.Entities.ExceptionHandling
             AddErrorResult(error);
             throw new ExitFromProcess(error);
         }
-        
+
     }
 }

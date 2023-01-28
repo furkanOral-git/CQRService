@@ -8,16 +8,17 @@ namespace CQRService.Entities.Interceptors
 {
     public record InterceptorResultStack : IInterceptorResultStack, IResultStackAccessor
     {
-        public int Count { get { return Results.Length; } }
+        public int Count { get { return (Results is null) ? 0 : Results.Length; } }
         public InterceptorResult[] Results { get; private set; }
-        public InterceptorResult this[int indx] { get { return Results[indx]; } }
+        public InterceptorResult this[int indx] { get { return (Results is null) ? default : Results[indx]; } }
 
         public InterceptorResultStack()
         {
-            Results = Array.Empty<InterceptorResult>();
+
         }
         public void AddInterceptorResult(string sender, object data)
         {
+            Results ??= Array.Empty<InterceptorResult>();
             InterceptorResult result = new InterceptorResult(sender, data);
             var array = Results;
             Array.Resize<InterceptorResult>(ref array, array.Length + 1);
